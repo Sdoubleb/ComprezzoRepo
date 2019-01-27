@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GZipTest
+namespace GZipper
 {
     class ProducerConsumerQueue<T>
     {
