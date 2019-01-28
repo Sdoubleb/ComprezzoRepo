@@ -54,7 +54,7 @@ namespace GZipper
                 _queueToCompress.Enqueue(readBytes);
             }
 
-            for (long i = 1; i < countOfBlocks; i++)
+            for (long i = 0; i < countOfBlocks - 1; i++)
                 read(_blockLength);
 
             // дочитываем аппендикс
@@ -64,7 +64,7 @@ namespace GZipper
 
         private void WriteIntoTarget(GZipStream compression, long countOfBlocks)
         {
-            for (long i = 1; i <= countOfBlocks; i++)
+            for (long i = 0; i < countOfBlocks; i++)
             {
 #pragma warning disable IDE0018 // Объявление встроенной переменной
                 byte[] bytesToWrite;

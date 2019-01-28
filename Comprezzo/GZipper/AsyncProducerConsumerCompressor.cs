@@ -54,8 +54,8 @@ namespace GZipper
                     new ReadByteBlock(order, readBytes, source));
             }
 
-            for (long i = 1; i < countOfBlocks; i++)
-                read(_blockLength, i - 1);
+            for (long i = 0; i < countOfBlocks - 1; i++)
+                read(_blockLength, i);
 
             // дочитываем аппендикс
             if (source.Position < source.Length)
@@ -71,13 +71,13 @@ namespace GZipper
 
         private void WriteIntoTarget(GZipStream compression, long countOfBlocks)
         {
-            for (long i = 1; i <= countOfBlocks; i++)
+            for (long i = 0; i < countOfBlocks; i++)
             {
 #pragma warning disable IDE0018 // Объявление встроенной переменной
                 byte[] bytesToWrite;
 #pragma warning restore IDE0018 // Объявление встроенной переменной
 
-                while (!_byteBlocksToCompress.TryGetAndRemove(i - 1, out bytesToWrite))
+                while (!_byteBlocksToCompress.TryGetAndRemove(i, out bytesToWrite))
                     continue;
                 compression.Write(bytesToWrite, 0, bytesToWrite.Length);
             }
