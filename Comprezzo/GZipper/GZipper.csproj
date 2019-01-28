@@ -38,6 +38,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncProducerConsumerCompressor.cs" />
+    <Compile Include="ReadByteBlock.cs" />
+    <Compile Include="ConcurrentDictionary.cs" />
     <Compile Include="ConcurrentQueue.cs" />
     <Compile Include="ProducerConsumerCompressor.cs" />
     <Compile Include="ProducerConsumerQueue.cs" />

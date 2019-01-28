@@ -2,7 +2,7 @@
 
 namespace GZipper
 {
-    internal class ConcurrentQueue<T>
+    class ConcurrentQueue<T>
     {
         private Queue<T> _queue = new Queue<T>();
 

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.IO;
-using System.IO.Compression;
-using System.Threading;
+using System.Diagnostics;
 using GZipper;
 
 namespace GZipTest
@@ -14,7 +12,7 @@ namespace GZipTest
             string inputFileName = args[1];
             string outputFileName = args[2];
 
-            ICompressor compressor = new ProducerConsumerCompressor(inputFileName, outputFileName);
+            ICompressor compressor = new AsyncProducerConsumerCompressor(inputFileName, outputFileName);
 
             string beginMessage, endMessage;
             Action action;
@@ -36,9 +34,14 @@ namespace GZipTest
             }
 
             Console.WriteLine(beginMessage);
-            action();
-            Console.WriteLine(endMessage);
 
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            action();
+            sw.Stop();
+
+            Console.WriteLine(endMessage);
+            Console.WriteLine($"Elapsed time: {sw.Elapsed}.");
             Console.ReadLine();
         }
     }
