@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncProducerConsumerCompressor.cs" />
+    <Compile Include="AvoidingLockConcurrentStorage.cs" />
     <Compile Include="ReadByteBlock.cs" />
     <Compile Include="ConcurrentDictionary.cs" />
     <Compile Include="ConcurrentQueue.cs" />

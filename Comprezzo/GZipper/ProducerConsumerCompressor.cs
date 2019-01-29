@@ -13,7 +13,7 @@ namespace GZipper
         private string _outputFileName;
         private int _blockLength;
 
-        private ProducerConsumerQueue<byte[]> _queueToCompress = new ProducerConsumerQueue<byte[]>();
+        private readonly ProducerConsumerQueue<byte[]> _queueToCompress = new ProducerConsumerQueue<byte[]>();
 
         public ProducerConsumerCompressor(string inputFileName, string outputFileName)
             : this(inputFileName, outputFileName, DEFAULT_BLOCK_LENGTH) { }

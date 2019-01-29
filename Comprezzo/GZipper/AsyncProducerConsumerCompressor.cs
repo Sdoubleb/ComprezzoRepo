@@ -9,11 +9,13 @@ namespace GZipper
     {
         private const int DEFAULT_BLOCK_LENGTH = 1 * 1024 * 1024; // 1 МБ
 
-        private string _inputFileName;
-        private string _outputFileName;
-        private int _blockLength;
+        private readonly string _inputFileName;
+        private readonly string _outputFileName;
 
-        private ConcurrentDictionary<long, byte[]> _byteBlocksToCompress = new ConcurrentDictionary<long, byte[]>();
+        private readonly int _blockLength;
+        private readonly long _countOfBlocks;
+
+        private readonly AvoidingLockConcurrentStorage<byte[]> _byteBlocksToCompress;
 
         public AsyncProducerConsumerCompressor(string inputFileName, string outputFileName)
             : this(inputFileName, outputFileName, DEFAULT_BLOCK_LENGTH) { }
@@ -22,20 +24,24 @@ namespace GZipper
         {
             _inputFileName = inputFileName;
             _outputFileName = outputFileName;
+
+            var file = new FileInfo(_inputFileName);
+
             _blockLength = blockLength;
+            _countOfBlocks = file.Length / _blockLength
+                + (file.Length % _blockLength == 0 ? 0 : 1);
+
+            _byteBlocksToCompress = new AvoidingLockConcurrentStorage<byte[]>(_countOfBlocks);
         }
 
         public void Compress()
         {
-            using (FileStream source = new FileStream(_inputFileName, FileMode.Open, FileAccess.Read, FileShare.Read, _blockLength, true))
-            using (FileStream target = new FileStream($"{_outputFileName}.gz", FileMode.Create, FileAccess.Write, FileShare.None, _blockLength))
+            using (FileStream source = new FileStream(_inputFileName, FileMode.Open, FileAccess.Read, FileShare.Read, 4 * _blockLength, true))
+            using (FileStream target = new FileStream($"{_outputFileName}.gz", FileMode.Create, FileAccess.Write, FileShare.None, 4 * _blockLength))
             using (GZipStream compression = new GZipStream(target, CompressionMode.Compress))
             {
-                long countOfBlocks = source.Length / _blockLength
-                    + (source.Length % _blockLength == 0 ? 0 : 1);
-
-                Thread readThread = new Thread(() => ReadSource(source, countOfBlocks));
-                Thread writeThread = new Thread(() => WriteIntoTarget(compression, countOfBlocks));
+                Thread readThread = new Thread(() => ReadSource(source, _countOfBlocks));
+                Thread writeThread = new Thread(() => WriteIntoTarget(compression, _countOfBlocks));
 
                 readThread.Start();
                 writeThread.Start();

@@ -4,9 +4,9 @@ namespace GZipper
 {
     class ConcurrentDictionary<TKey, TValue>
     {
-        private Dictionary<TKey, TValue> _dictionary = new Dictionary<TKey, TValue>();
+        private readonly Dictionary<TKey, TValue> _dictionary = new Dictionary<TKey, TValue>();
 
-        private object _locker = new object();
+        private readonly object _locker = new object();
 
         public void Add(TKey key, TValue value)
         {

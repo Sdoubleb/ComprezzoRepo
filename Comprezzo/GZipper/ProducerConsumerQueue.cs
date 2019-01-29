@@ -4,10 +4,10 @@ namespace GZipper
 {
     class ProducerConsumerQueue<T>
     {
-        private Queue<T> _producerQueue = new Queue<T>();
-        private Queue<T> _consumerQueue = new Queue<T>();
+        private readonly Queue<T> _producerQueue = new Queue<T>();
+        private readonly Queue<T> _consumerQueue = new Queue<T>();
 
-        private object _locker = new object();
+        private readonly object _locker = new object();
 
         public void Enqueue(T element)
         {
