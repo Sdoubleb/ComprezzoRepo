@@ -40,6 +40,9 @@
   <ItemGroup>
     <Compile Include="AsyncProducerConsumerCompressor.cs" />
     <Compile Include="AvoidingLockConcurrentStorage.cs" />
+    <Compile Include="ICleaner.cs" />
+    <Compile Include="ICreator.cs" />
+    <Compile Include="ObjectPool.cs" />
     <Compile Include="ReadByteBlock.cs" />
     <Compile Include="ConcurrentDictionary.cs" />
     <Compile Include="ConcurrentQueue.cs" />

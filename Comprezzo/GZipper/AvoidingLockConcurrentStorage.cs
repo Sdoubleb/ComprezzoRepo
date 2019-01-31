@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace GZipper
+﻿namespace GZipper
 {
     class AvoidingLockConcurrentStorage<TValue>
     {
