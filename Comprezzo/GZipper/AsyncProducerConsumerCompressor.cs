@@ -8,6 +8,7 @@ namespace GZipper
     public partial class AsyncProducerConsumerCompressor : ICompressor
     {
         private const int DEFAULT_BLOCK_LENGTH = 1 * 1024 * 1024; // 1 МБ
+        private const int DEFAULT_BLOCK_POOL_SIZE = 128;
 
         private readonly string _inputFileName;
         private readonly string _outputFileName;
@@ -15,6 +16,7 @@ namespace GZipper
         private readonly int _blockLength;
         private readonly long _countOfBlocks;
 
+        private readonly ObjectPool<byte[]> _byteBlockPool;
         private readonly AvoidingLockConcurrentStorage<byte[]> _byteBlocksToCompress;
 
         public AsyncProducerConsumerCompressor(string inputFileName, string outputFileName)
@@ -31,6 +33,7 @@ namespace GZipper
             _countOfBlocks = file.Length / _blockLength
                 + (file.Length % _blockLength == 0 ? 0 : 1);
 
+            _byteBlockPool = new ObjectPool<byte[]>(new ByteArrayCreator(_blockLength), null, DEFAULT_BLOCK_POOL_SIZE);
             _byteBlocksToCompress = new AvoidingLockConcurrentStorage<byte[]>(_countOfBlocks);
         }
 
@@ -40,8 +43,8 @@ namespace GZipper
             using (FileStream target = new FileStream($"{_outputFileName}.gz", FileMode.Create, FileAccess.Write, FileShare.None, 4 * _blockLength))
             using (GZipStream compression = new GZipStream(target, CompressionMode.Compress))
             {
-                Thread readThread = new Thread(() => ReadSource(source, _countOfBlocks));
-                Thread writeThread = new Thread(() => WriteIntoTarget(compression, _countOfBlocks));
+                Thread readThread = new Thread(() => ReadSource(source));
+                Thread writeThread = new Thread(() => WriteIntoTarget(compression));
 
                 readThread.Start();
                 writeThread.Start();
@@ -51,21 +54,20 @@ namespace GZipper
             }
         }
 
-        private void ReadSource(FileStream source, long countOfBlocks)
+        private void ReadSource(FileStream source)
         {
-            void read(int length, long order)
+            void read(byte[] bytes, long order)
             {
-                byte[] readBytes = new byte[length];
-                source.BeginRead(readBytes, 0, length, new AsyncCallback(EndReadSourceBlock),
-                    new ReadByteBlock(order, readBytes, source));
+                source.BeginRead(bytes, 0, bytes.Length, new AsyncCallback(EndReadSourceBlock),
+                    new ReadByteBlock(order, bytes, source));
             }
 
-            for (long i = 0; i < countOfBlocks - 1; i++)
-                read(_blockLength, i);
+            for (long i = 0; i < _countOfBlocks - 1; i++)
+                read(_byteBlockPool.Wait(), i);
 
             // дочитываем аппендикс
-            if (source.Position < source.Length)
-                read((int)(source.Length - source.Position), countOfBlocks - 1);
+            var appendix = new byte[source.Length - source.Position];
+            read(appendix, _countOfBlocks - 1);
         }
 
         private void EndReadSourceBlock(IAsyncResult readAsyncResult)
@@ -75,9 +77,9 @@ namespace GZipper
             _byteBlocksToCompress.Add(readByteBlock.Order, readByteBlock.ByteBlock);
         }
 
-        private void WriteIntoTarget(GZipStream compression, long countOfBlocks)
+        private void WriteIntoTarget(GZipStream compression)
         {
-            for (long i = 0; i < countOfBlocks; i++)
+            for (long i = 0; i < _countOfBlocks; i++)
             {
 #pragma warning disable IDE0018 // Объявление встроенной переменной
                 byte[] bytesToWrite;
@@ -86,6 +88,10 @@ namespace GZipper
                 while (!_byteBlocksToCompress.TryGetAndRemove(i, out bytesToWrite))
                     continue;
                 compression.Write(bytesToWrite, 0, bytesToWrite.Length);
+
+                // аппендикс не возвращаем в пул, т.к. он был взят не оттуда
+                if (i < _countOfBlocks - 1)
+                    _byteBlockPool.Release(bytesToWrite);
             }
         }
 

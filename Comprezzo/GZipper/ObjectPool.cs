@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace GZipper
 {
-    class ObjectPool<T>
+    class ObjectPool<T> : IDisposable
         where T : class
     {
         private readonly ICreator<T> _creator;
@@ -58,5 +59,7 @@ namespace GZipper
                 _semaphore.Release();
             }
         }
+
+        public void Dispose() => _semaphore.Close();
     }
 }

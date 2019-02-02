@@ -42,6 +42,7 @@ namespace GZipTest
 
             Console.WriteLine(endMessage);
             Console.WriteLine($"Elapsed time: {sw.Elapsed}.");
+
             Console.ReadLine();
         }
     }
