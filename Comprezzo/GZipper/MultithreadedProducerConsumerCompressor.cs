@@ -20,6 +20,8 @@ namespace GZipper
         private readonly ObjectPool<byte[]> _byteBlockPool;
         private readonly AvoidingLockConcurrentStorage<OrderedByteBlock> _byteBlocksToCompress;
 
+        private readonly AutoResetEvent _writeWaitHandler = new AutoResetEvent(true);
+
         public MultithreadedProducerConsumerCompressor(string inputFileName, string outputFileName)
             : this(inputFileName, outputFileName, DEFAULT_BLOCK_LENGTH) { }
 
@@ -41,7 +43,7 @@ namespace GZipper
         public void Compress()
         {
             using (FileStream source = new FileStream(_inputFileName, FileMode.Open, FileAccess.Read, FileShare.Read, _blockLength, FileOptions.SequentialScan | FileOptions.Asynchronous))
-            using (FileStream target = new FileStream($"{_outputFileName}.gz", FileMode.Create, FileAccess.Write, FileShare.None, _blockLength, FileOptions.SequentialScan))
+            using (FileStream target = new FileStream($"{_outputFileName}.gz", FileMode.Create, FileAccess.Write, FileShare.None, _blockLength, FileOptions.SequentialScan | FileOptions.Asynchronous))
             using (GZipStream compression = new GZipStream(target, CompressionMode.Compress))
             {
                 //Stream.Synchronized(source);
@@ -100,9 +102,20 @@ namespace GZipper
 
                 while (!_byteBlocksToCompress.TryGetAndRemove(i, out byteBlockToWrite))
                     continue;
-                compression.Write(byteBlockToWrite.ByteBlock, 0, byteBlockToWrite.Length);
-                _byteBlockPool.Release(byteBlockToWrite.ByteBlock);
+                _writeWaitHandler.WaitOne();
+                compression.BeginWrite(byteBlockToWrite.ByteBlock, 0, byteBlockToWrite.Length,
+                    new AsyncCallback(EndWriteBlockIntoTarget),
+                    new OrderedByteBlock(byteBlockToWrite.Order, byteBlockToWrite.ByteBlock, compression));
             }
+            _writeWaitHandler.WaitOne();
+        }
+
+        private void EndWriteBlockIntoTarget(IAsyncResult writeAsyncResult)
+        {
+            var writtenByteBlock = (OrderedByteBlock)writeAsyncResult.AsyncState;
+            writtenByteBlock.Stream.EndWrite(writeAsyncResult);
+            _writeWaitHandler.Set();
+            _byteBlockPool.Release(writtenByteBlock.ByteBlock);
         }
 
         public void Decompress() => throw new NotImplementedException();
