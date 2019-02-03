@@ -43,6 +43,7 @@
     <Compile Include="ByteArrayCreator.cs" />
     <Compile Include="ICleaner.cs" />
     <Compile Include="ICreator.cs" />
+    <Compile Include="MultithreadedProducerConsumerCompressor.cs" />
     <Compile Include="ObjectPool.cs" />
     <Compile Include="ReadByteBlock.cs" />
     <Compile Include="ConcurrentDictionary.cs" />

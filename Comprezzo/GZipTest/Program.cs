@@ -12,7 +12,7 @@ namespace GZipTest
             string inputFileName = args[1];
             string outputFileName = args[2];
 
-            ICompressor compressor = new AsyncProducerConsumerCompressor(inputFileName, outputFileName);
+            ICompressor compressor = new MultithreadedProducerConsumerCompressor(inputFileName, outputFileName);
 
             string beginMessage, endMessage;
             Action action;
@@ -37,7 +37,9 @@ namespace GZipTest
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
+
             action();
+
             sw.Stop();
 
             Console.WriteLine(endMessage);
