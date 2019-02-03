@@ -2,9 +2,9 @@
 
 namespace GZipper
 {
-    class ReadByteBlock
+    class OrderedByteBlock
     {
-        public ReadByteBlock(long order, byte[] byteBlock, FileStream stream)
+        public OrderedByteBlock(long order, byte[] byteBlock, Stream stream)
         {
             Order = order;
             ByteBlock = byteBlock;
@@ -13,7 +13,7 @@ namespace GZipper
 
         public long Order { get; }
         public byte[] ByteBlock { get; }
-        public FileStream Stream { get; } // TODO убрать отсюда
+        public Stream Stream { get; } // TODO убрать отсюда
 
         public int Length { get; set; }
     }

@@ -39,8 +39,8 @@ namespace GZipper
 
         public void Compress()
         {
-            using (FileStream source = new FileStream(_inputFileName, FileMode.Open, FileAccess.Read, FileShare.Read, 4 * _blockLength, true))
-            using (FileStream target = new FileStream($"{_outputFileName}.gz", FileMode.Create, FileAccess.Write, FileShare.None, 4 * _blockLength))
+            using (FileStream source = new FileStream(_inputFileName, FileMode.Open, FileAccess.Read, FileShare.Read, _blockLength, FileOptions.SequentialScan | FileOptions.Asynchronous))
+            using (FileStream target = new FileStream($"{_outputFileName}.gz", FileMode.Create, FileAccess.Write, FileShare.None, _blockLength, FileOptions.SequentialScan))
             using (GZipStream compression = new GZipStream(target, CompressionMode.Compress))
             {
                 Thread readThread = new Thread(() => ReadSource(source));
@@ -59,7 +59,7 @@ namespace GZipper
             void read(byte[] bytes, long order)
             {
                 source.BeginRead(bytes, 0, bytes.Length, new AsyncCallback(EndReadSourceBlock),
-                    new ReadByteBlock(order, bytes, source));
+                    new OrderedByteBlock(order, bytes, source));
             }
 
             for (long i = 0; i < _countOfBlocks - 1; i++)
@@ -72,7 +72,7 @@ namespace GZipper
 
         private void EndReadSourceBlock(IAsyncResult readAsyncResult)
         {
-            var readByteBlock = (ReadByteBlock)readAsyncResult.AsyncState;
+            var readByteBlock = (OrderedByteBlock)readAsyncResult.AsyncState;
             readByteBlock.Stream.EndRead(readAsyncResult);
             _byteBlocksToCompress.Add(readByteBlock.Order, readByteBlock.ByteBlock);
         }

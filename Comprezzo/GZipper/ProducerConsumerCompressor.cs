@@ -27,8 +27,8 @@ namespace GZipper
 
         public void Compress()
         {
-            using (FileStream source = new FileStream(_inputFileName, FileMode.Open, FileAccess.Read, FileShare.Read, 2 * _blockLength))
-            using (FileStream target = new FileStream($"{_outputFileName}.gz", FileMode.Create, FileAccess.Write, FileShare.None, 2 * _blockLength))
+            using (FileStream source = new FileStream(_inputFileName, FileMode.Open, FileAccess.Read, FileShare.Read, _blockLength, FileOptions.SequentialScan))
+            using (FileStream target = new FileStream($"{_outputFileName}.gz", FileMode.Create, FileAccess.Write, FileShare.None, _blockLength, FileOptions.SequentialScan))
             using (GZipStream compression = new GZipStream(target, CompressionMode.Compress))
             {
                 long countOfBlocks = source.Length / _blockLength
