@@ -41,8 +41,13 @@
     <Compile Include="AsyncProducerConsumerCompressor.cs" />
     <Compile Include="AvoidingLockConcurrentStorage.cs" />
     <Compile Include="ByteArrayCreator.cs" />
+    <Compile Include="CompressionFileOpenerBase.cs" />
+    <Compile Include="FileCompressorBase.cs" />
+    <Compile Include="GZipCompressionFileOpener.cs" />
     <Compile Include="ICleaner.cs" />
+    <Compile Include="ICompressionFileOpener.cs" />
     <Compile Include="ICreator.cs" />
+    <Compile Include="IFileCompressor.cs" />
     <Compile Include="MultithreadedProducerConsumerCompressor.cs" />
     <Compile Include="ObjectPool.cs" />
     <Compile Include="OrderedByteBlock.cs" />
