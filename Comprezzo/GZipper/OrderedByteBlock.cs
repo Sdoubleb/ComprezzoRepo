@@ -2,18 +2,18 @@
 
 namespace GZipper
 {
-    class OrderedByteBlock
+    public class OrderedByteBlock
     {
-        public OrderedByteBlock(long order, byte[] byteBlock, Stream stream)
+        public OrderedByteBlock(long order, byte[] bytes, Stream stream)
         {
             Order = order;
-            ByteBlock = byteBlock;
+            Bytes = bytes;
             Stream = stream;
         }
 
         public long Order { get; }
-        public byte[] ByteBlock { get; }
-        public Stream Stream { get; } // TODO убрать отсюда
+        public byte[] Bytes { get; }
+        public Stream Stream { get; } // TODO: убрать отсюда
 
         public int Length { get; set; }
     }

@@ -74,7 +74,7 @@ namespace GZipper
         {
             var readByteBlock = (OrderedByteBlock)readAsyncResult.AsyncState;
             readByteBlock.Stream.EndRead(readAsyncResult);
-            _byteBlocksToCompress.Add(readByteBlock.Order, readByteBlock.ByteBlock);
+            _byteBlocksToCompress.Add(readByteBlock.Order, readByteBlock.Bytes);
         }
 
         private void WriteIntoTarget(GZipStream compression)

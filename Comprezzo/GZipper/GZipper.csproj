@@ -48,16 +48,22 @@
     <Compile Include="ICompressionFileOpener.cs" />
     <Compile Include="ICreator.cs" />
     <Compile Include="IFileCompressor.cs" />
+    <Compile Include="IObjectPool.cs" />
+    <Compile Include="IOrderlyStreamReader.cs" />
+    <Compile Include="IStorage.cs" />
     <Compile Include="MultithreadedProducerConsumerCompressor.cs" />
     <Compile Include="ObjectPool.cs" />
     <Compile Include="OrderedByteBlock.cs" />
-    <Compile Include="ConcurrentDictionary.cs" />
+    <Compile Include="ConcurrentStorage.cs" />
     <Compile Include="ConcurrentQueue.cs" />
     <Compile Include="ProducerConsumerCompressor.cs" />
     <Compile Include="ProducerConsumerQueue.cs" />
     <Compile Include="SingleThreadCompressor.cs" />
     <Compile Include="ICompressor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AsyncStreamReader.cs" />
+    <Compile Include="ThriftyOrderlyStreamReader.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -2,7 +2,7 @@
 
 namespace GZipper
 {
-    class ConcurrentDictionary<TKey, TValue>
+    class ConcurrentStorage<TKey, TValue> : IStorage<TKey, TValue>
     {
         private readonly Dictionary<TKey, TValue> _dictionary = new Dictionary<TKey, TValue>();
 

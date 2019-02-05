@@ -87,7 +87,7 @@ namespace GZipper
             if ((readByteBlock.Length = readByteBlock.Stream.EndRead(readAsyncResult)) > 0)
                 _byteBlocksToCompress.Add(readByteBlock.Order, readByteBlock);
             else
-                _byteBlockPool.Release(readByteBlock.ByteBlock);
+                _byteBlockPool.Release(readByteBlock.Bytes);
         }
 
         private void WriteIntoTarget(GZipStream compression)
@@ -100,8 +100,8 @@ namespace GZipper
 
                 while (!_byteBlocksToCompress.TryGetAndRemove(i, out byteBlockToWrite))
                     continue;
-                compression.Write(byteBlockToWrite.ByteBlock, 0, byteBlockToWrite.Length);
-                _byteBlockPool.Release(byteBlockToWrite.ByteBlock);
+                compression.Write(byteBlockToWrite.Bytes, 0, byteBlockToWrite.Length);
+                _byteBlockPool.Release(byteBlockToWrite.Bytes);
             }
         }
 
