@@ -1,13 +1,14 @@
 ﻿using System.IO;
+using Sbb.Compression.Common;
 using Sbb.Compression.Storages;
 
 namespace Sbb.Compression.Stream4ers
 {
-    class ThriftyOrderlyStreamReader : IOrderlyStreamReader
+    class ThriftyBlockyStreamReader : IBlockyStreamReader
     {
         private readonly IWaitableObjectPool<byte[]> _bytePool;
 
-        public ThriftyOrderlyStreamReader(IBlockyStreamReaderProvider readerProvider,
+        public ThriftyBlockyStreamReader(IStreamReaderProvider readerProvider,
             ISizeableStorageProvider<long, NumberedByteBlock> storageProvider,
             IWaitableObjectPool<byte[]> bytePool)
         {
@@ -16,7 +17,7 @@ namespace Sbb.Compression.Stream4ers
             StorageProvider = storageProvider;
         }
 
-        private IBlockyStreamReaderProvider StreamReaderProvider { get; set; }
+        private IStreamReaderProvider StreamReaderProvider { get; set; }
 
         private ISizeableStorageProvider<long, NumberedByteBlock> StorageProvider { get; set; }
 
@@ -24,7 +25,7 @@ namespace Sbb.Compression.Stream4ers
         {
             long totalCountOfBlocks = Utils.CalculateCountOfBlocks(stream.Length, blockLength);
             ISizeableStorage<long, NumberedByteBlock> storage = StorageProvider.ProvideNew(totalCountOfBlocks);
-            IBlockyStreamReader reader = StreamReaderProvider.ProvideNew(stream, blockLength, _bytePool, storage);
+            IReader reader = StreamReaderProvider.ProvideNew(stream, blockLength, _bytePool, storage);
             reader.Read();
             return storage;
         }

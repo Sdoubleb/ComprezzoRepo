@@ -9,14 +9,14 @@ namespace Sbb.Compression.Storages
     {
         private readonly Func<T> _creator;
         private readonly Action<T> _cleaner;
-        private readonly int _maxCount;
-
+        
         private readonly Queue<T> _pool = new Queue<T>();
 
+        private readonly int _maxCount;
         private int _currentCount;
 
-        private object _locker = new object();
-        private Semaphore _semaphore;
+        private readonly object _locker = new object();
+        private readonly Semaphore _semaphore;
 
         public ObjectPool(ICreator<T> creator, ICleaner<T> cleaner = null, int maxCount = Int32.MaxValue)
             : this(() => creator.Create(), obj => cleaner.Clean(obj), maxCount) { }
@@ -70,6 +70,8 @@ namespace Sbb.Compression.Storages
     {
         private readonly Func<T> _creator;
         private readonly Action<T> _cleaner;
+        
+        public int _sizeOfElement;
 
         public SizeDefiningObjectPoolProvider(int sizeOfElement, ICreator<T> creator, ICleaner<T> cleaner = null)
             : this(sizeOfElement, () => creator.Create(), obj => cleaner.Clean(obj)) { }
@@ -78,14 +80,12 @@ namespace Sbb.Compression.Storages
         {
             _creator = creator;
             _cleaner = cleaner;
-            SizeOfElement = sizeOfElement;
+            _sizeOfElement = sizeOfElement;
         }
-
-        public int SizeOfElement { get; set; }
 
         public IPoolSizeDefiner PoolSizeDefiner { get; set; } = new ModestPoolSizeDefiner();
 
         public IWaitableObjectPool<T> ProvideNew()
-            => new ObjectPool<T>(_creator, _cleaner, PoolSizeDefiner.Define(SizeOfElement));
+            => new ObjectPool<T>(_creator, _cleaner, PoolSizeDefiner.Define(_sizeOfElement));
     }
 }

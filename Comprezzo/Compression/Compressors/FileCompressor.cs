@@ -7,15 +7,15 @@ namespace Sbb.Compression.Compressors
 {
     public class FileCompressor : IFileCompressor
     {
+        private IStream2StreamPump _pump;
+
         public FileCompressor(ICompressionFileOpener fileOpener, IStream2StreamPump pump)
         {
+            _pump = pump;
             FileOpener = fileOpener;
-            Pump = pump;
         }
 
         public ICompressionFileOpener FileOpener { get; set; }
-
-        private IStream2StreamPump Pump { get; set; }
 
         public void Compress(string inputFilePath, string outputFilePath)
         {
@@ -38,7 +38,7 @@ namespace Sbb.Compression.Compressors
 
         protected virtual void Work(Stream source, Stream target)
         {
-            Pump.Pump(source, target);
+            _pump.Pump(source, target);
         }
     }
 }

@@ -17,5 +17,10 @@ namespace Sbb.Compression
                 return availableMBytes;
             }
         }
+
+        public static float GetSizeOfElementInMBytes(int sizeOfElementInBytes)
+        {
+            return sizeOfElementInBytes / 1024F / 1024;
+        }
     }
 }

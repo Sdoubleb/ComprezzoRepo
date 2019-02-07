@@ -5,12 +5,6 @@ namespace Sbb.Compression.Stream4ers
 {
     public interface IBlockyStreamReader
     {
-        void Read();
-    }
-
-    public interface IBlockyStreamReaderProvider
-    {
-        IBlockyStreamReader ProvideNew(Stream stream, int blockLength,
-            IWaitableObjectPool<byte[]> bytePool, IStorage<long, NumberedByteBlock> byteBlocks);
+        ISizeableStorage<long, NumberedByteBlock> Read(Stream stream, int blockLength);
     }
 }

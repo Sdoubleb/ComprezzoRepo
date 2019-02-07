@@ -6,7 +6,7 @@ using Sbb.Compression.Storages;
 
 namespace Sbb.Compression.Stream4ers
 {
-    class AsyncBlockyStreamReader : IBlockyStreamReader
+    class AsyncBlockyStreamReader : IReader
     {
         private readonly Stream _stream;
 
@@ -62,9 +62,9 @@ namespace Sbb.Compression.Stream4ers
         }
     }
 
-    class AsyncBlockyStreamReaderProvider : IBlockyStreamReaderProvider
+    class AsyncBlockyStreamReaderProvider : IStreamReaderProvider
     {
-        public IBlockyStreamReader ProvideNew(Stream stream, int blockLength,
+        public IReader ProvideNew(Stream stream, int blockLength,
             IWaitableObjectPool<byte[]> bytePool, IStorage<long, NumberedByteBlock> byteBlocks)
         {
             return new AsyncBlockyStreamReader(stream, blockLength, bytePool, byteBlocks, ThreadProvider);

@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using Sbb.Compression.Common;
 using Sbb.Compression.Storages;
 
 namespace Sbb.Compression.Stream4ers
 {
-    class BlockyStreamWriter : IBlockyStreamWriter
+    class SyncBlockyStreamWriter : IWriter
     {
         private readonly Stream _stream;
 
         private readonly IObjectPool<byte[]> _bytePool;
         private readonly IEnumerable<NumberedByteBlock> _byteBlocks;
 
-        public BlockyStreamWriter(Stream stream,
+        public SyncBlockyStreamWriter(Stream stream,
             IObjectPool<byte[]> bytePool, IEnumerable<NumberedByteBlock> byteBlocks)
         {
             _stream = stream;
@@ -23,18 +24,21 @@ namespace Sbb.Compression.Stream4ers
         {
             foreach (var block in _byteBlocks)
             {
+                // на практике оказалось, что при синхронной записи
+                // достигается гораздо меньший расход памяти
                 _stream.Write(block.Bytes, 0, block.Length);
+
                 _bytePool.Release(block.Bytes);
             }
         }
     }
 
-    class BlockyStreamWriterProvider : IBlockyStreamWriterProvider
+    class BlockyStreamWriterProvider : IStreamWriterProvider
     {
-        public IBlockyStreamWriter ProvideNew(Stream stream,
+        public IWriter ProvideNew(Stream stream,
             IObjectPool<byte[]> bytePool, IEnumerable<NumberedByteBlock> byteBlocks)
         {
-            return new BlockyStreamWriter(stream, bytePool, byteBlocks);
+            return new SyncBlockyStreamWriter(stream, bytePool, byteBlocks);
         }
     }
 }

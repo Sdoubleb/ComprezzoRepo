@@ -2,12 +2,13 @@
 
 namespace Sbb.Compression.Stream4ers
 {
-    class ThriftyOrderlyStream4erFactory : IOrderlyStream4erFactory
+    class ThriftyBlockyStream4erFactory : IBlockyStream4erFactory
     {
-        public ThriftyOrderlyStream4erFactory(IBlockyStreamReaderProvider readerProvider,
-            IBlockyStreamWriterProvider writerProvider, IWaitableObjectPoolProvider<byte[]> poolProvider,
+        public ThriftyBlockyStream4erFactory(IStreamReaderProvider readerProvider,
+            IStreamWriterProvider writerProvider,
             ISizeableStorageProvider<long, NumberedByteBlock> storageProvider,
-            INumericStorageEnumerableProvider<NumberedByteBlock> storageEnumerableProvider)
+            INumericStorageEnumerableProvider<NumberedByteBlock> storageEnumerableProvider,
+            IWaitableObjectPoolProvider<byte[]> poolProvider)
         {
             ReaderProvider = readerProvider;
             WriterProvider = writerProvider;
@@ -16,9 +17,9 @@ namespace Sbb.Compression.Stream4ers
             StorageEnumerableProvider = storageEnumerableProvider;
         }
 
-        public IBlockyStreamReaderProvider ReaderProvider { get; set; }
+        public IStreamReaderProvider ReaderProvider { get; set; }
 
-        public IBlockyStreamWriterProvider WriterProvider { get; set; }
+        public IStreamWriterProvider WriterProvider { get; set; }
 
         public IWaitableObjectPoolProvider<byte[]> PoolProvider { get; set; }
 
@@ -26,12 +27,12 @@ namespace Sbb.Compression.Stream4ers
 
         public INumericStorageEnumerableProvider<NumberedByteBlock> StorageEnumerableProvider { get; set; }
 
-        public OrderlyStream4erPair CreateStream4erPair()
+        public BlockyStream4erPair CreateStream4erPair()
         {
             IWaitableObjectPool<byte[]> bytePool = PoolProvider.ProvideNew();
-            var reader = new ThriftyOrderlyStreamReader(ReaderProvider, StorageProvider, bytePool);
-            var writer = new ThriftyOrderlyStreamWriter(WriterProvider, StorageEnumerableProvider, bytePool);
-            return new OrderlyStream4erPair
+            var reader = new ThriftyBlockyStreamReader(ReaderProvider, StorageProvider, bytePool);
+            var writer = new ThriftyBlockyStreamWriter(WriterProvider, StorageEnumerableProvider, bytePool);
+            return new BlockyStream4erPair
             {
                 StreamReader = reader,
                 StreamWriter = writer

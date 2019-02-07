@@ -39,11 +39,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\IReader.cs" />
+    <Compile Include="Common\IWriter.cs" />
     <Compile Include="_Drafts\_OrderedByteBlock.cs" />
     <Compile Include="_Drafts\_AsyncCompressor.cs" />
     <Compile Include="Storages\AvoidingLockConcurrentStorage.cs" />
     <Compile Include="Compressors\FileCompressorCreator.cs" />
-    <Compile Include="Stream4ers\BlockyStreamWriter.cs" />
+    <Compile Include="Stream4ers\SyncBlockyStreamWriter.cs" />
     <Compile Include="_Drafts\_ByteArrayCreator.cs" />
     <Compile Include="FileOpeners\CompressionFileOpenerBase.cs" />
     <Compile Include="Compressors\FileCompressor.cs" />
@@ -54,21 +56,21 @@
     <Compile Include="Compressors\IFileCompressor.cs" />
     <Compile Include="Storages\INumericStorageEnumerableProvider.cs" />
     <Compile Include="Storages\IObjectPool.cs" />
-    <Compile Include="Stream4ers\IOrderlyStream4erFactory.cs" />
-    <Compile Include="Stream4ers\IOrderlyStreamReader.cs" />
-    <Compile Include="Stream4ers\IOrderlyStreamWriter.cs" />
+    <Compile Include="Stream4ers\IBlockyStream4erFactory.cs" />
     <Compile Include="Stream4ers\IBlockyStreamReader.cs" />
+    <Compile Include="Stream4ers\IBlockyStreamWriter.cs" />
+    <Compile Include="Stream4ers\IStreamReaderProvider.cs" />
     <Compile Include="Storages\IPoolSizeDefiner.cs" />
     <Compile Include="Storages\IStorage.cs" />
     <Compile Include="Stream4ers\Pumps\IStream2StreamPump.cs" />
-    <Compile Include="Stream4ers\IBlockyStreamWriter.cs" />
+    <Compile Include="Stream4ers\IStreamWriterProvider.cs" />
     <Compile Include="Common\IThreadProvider.cs" />
     <Compile Include="_Drafts\_MultithreadedCompressor.cs" />
     <Compile Include="Storages\ObjectPool.cs" />
     <Compile Include="NumberedByteBlock.cs" />
     <Compile Include="Storages\ConcurrentStorage.cs" />
     <Compile Include="_Drafts\_ConcurrentQueue.cs" />
-    <Compile Include="Stream4ers\OrderlyStream4erPair.cs" />
+    <Compile Include="Stream4ers\BlockyStream4erPair.cs" />
     <Compile Include="Storages\ModestPoolSizeDefiner.cs" />
     <Compile Include="_Drafts\_ProducerConsumerCompressor.cs" />
     <Compile Include="_Drafts\_ProducerConsumerQueue.cs" />
@@ -79,9 +81,9 @@
     <Compile Include="Storages\NumericStorageEnumerable.cs" />
     <Compile Include="Stream4ers\Pumps\BlockyStream2StreamPump.cs" />
     <Compile Include="Common\ThreadProvider.cs" />
-    <Compile Include="Stream4ers\ThriftyOrderlyStream4erFactory.cs" />
-    <Compile Include="Stream4ers\ThriftyOrderlyStreamReader.cs" />
-    <Compile Include="Stream4ers\ThriftyOrderlyStreamWriter.cs" />
+    <Compile Include="Stream4ers\ThriftyBlockyStream4erFactory.cs" />
+    <Compile Include="Stream4ers\ThriftyBlockyStreamReader.cs" />
+    <Compile Include="Stream4ers\ThriftyBlockyStreamWriter.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup />

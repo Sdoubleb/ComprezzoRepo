@@ -46,35 +46,30 @@ namespace Sbb.Compression.Compressors
 
         protected virtual IStream2StreamPump CreatePump()
         {
-            IOrderlyStream4erFactory stream4erFactory = CreateStream4erFactory();
+            IBlockyStream4erFactory stream4erFactory = CreateStream4erFactory();
             return new BlockyStream2StreamPump(stream4erFactory);
         }
 
-        protected virtual IOrderlyStream4erFactory CreateStream4erFactory()
+        protected virtual IBlockyStream4erFactory CreateStream4erFactory()
         {
-            IBlockyStreamReaderProvider readerProvider = CreateReaderProvider();
-            IBlockyStreamWriterProvider writerProvider = CreateWriterProvider();
+            IStreamReaderProvider readerProvider = CreateReaderProvider();
+            IStreamWriterProvider writerProvider = CreateWriterProvider();
             IWaitableObjectPoolProvider<byte[]> poolProvider = CreatePoolProvider();
             ISizeableStorageProvider<long, NumberedByteBlock> storageProvider = CreateStorageProvider();
             INumericStorageEnumerableProvider<NumberedByteBlock> storageEnumerableProvider
                 = CreateStorageEnumerableProvider();
-            return new ThriftyOrderlyStream4erFactory(readerProvider, writerProvider,
-                poolProvider, storageProvider, storageEnumerableProvider);
+            return new ThriftyBlockyStream4erFactory(readerProvider, writerProvider,
+                storageProvider, storageEnumerableProvider, poolProvider);
         }
 
-        protected virtual IBlockyStreamReaderProvider CreateReaderProvider()
+        protected virtual IStreamReaderProvider CreateReaderProvider()
         {
             return new AsyncBlockyStreamReaderProvider();
         }
 
-        protected virtual IBlockyStreamWriterProvider CreateWriterProvider()
+        protected virtual IStreamWriterProvider CreateWriterProvider()
         {
             return new BlockyStreamWriterProvider();
-        }
-
-        protected virtual IWaitableObjectPoolProvider<byte[]> CreatePoolProvider()
-        {
-            return new SizeDefiningObjectPoolProvider<byte[]>(BlockLength, ByteCreator);
         }
 
         protected virtual ISizeableStorageProvider<long, NumberedByteBlock> CreateStorageProvider()
@@ -85,6 +80,11 @@ namespace Sbb.Compression.Compressors
         protected virtual INumericStorageEnumerableProvider<NumberedByteBlock> CreateStorageEnumerableProvider()
         {
             return new NumericStorageEnumerableProvider<NumberedByteBlock>();
+        }
+
+        protected virtual IWaitableObjectPoolProvider<byte[]> CreatePoolProvider()
+        {
+            return new SizeDefiningObjectPoolProvider<byte[]>(BlockLength, ByteCreator);
         }
     }
 }
