@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using Sbb.Compression._Drafts;
+using Sbb.Compression.Compressors;
 
 namespace GZipTest
 {
@@ -8,44 +8,54 @@ namespace GZipTest
     {
         static void Main(string[] args)
         {
-            string operation = args[0];
-            string inputFileName = args[1];
-            string outputFileName = args[2];
-
-            _ICompressor compressor = new _MultithreadedCompressor(inputFileName, outputFileName);
-
-            string beginMessage, endMessage;
-            Action action;
-
-            switch (operation.ToLower())
+            try
             {
-                case "compress":
-                    action = compressor.Compress;
-                    beginMessage = "Compressing...";
-                    endMessage = "Compressed.";
-                    break;
-                case "decompress":
-                    action = compressor.Decompress;
-                    beginMessage = "Decompressing...";
-                    endMessage = "Decompressed.";
-                    break;
-                default:
-                    throw new ArgumentException($"Неподдерживаемая операция: {operation}.");
+                CompressionParams.Instance = new CompressionParams(args);
             }
+            catch (IndexOutOfRangeException)
+            {
+                Console.WriteLine("Неверно заданы параметры.");
+                return;
+            }
+            catch (ArgumentException ae)
+            {
+                Console.WriteLine(ae.Message);
+                return;
+            }
+
+            string beginMessage = CompressionParams.Instance.Compress ? "Сжатие..." : "Разжатие...";
+            string endMessage = CompressionParams.Instance.Compress ? "Сжато." : "Разжато.";
 
             Console.WriteLine(beginMessage);
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            action();
+            try
+            {
+                Work();
 
-            sw.Stop();
+                sw.Stop();
 
-            Console.WriteLine(endMessage);
-            Console.WriteLine($"Elapsed time: {sw.Elapsed}.");
+                Console.WriteLine(endMessage);
+                Console.WriteLine($"Времени затрачено: {sw.Elapsed}.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Ошибка: " + e.Message);
+            }
+        }
 
-            Console.ReadLine();
+        private static void Work()
+        {
+            var creator = new FileCompressorCreator();
+            IFileCompressor compressor = creator.Create();
+
+            CompressionParams @params = CompressionParams.Instance;
+            if (@params.Compress)
+                compressor.Compress(@params.InputFileName, @params.OutputFileName);
+            else
+                compressor.Decompress(@params.InputFileName, @params.OutputFileName);
         }
     }
 }
