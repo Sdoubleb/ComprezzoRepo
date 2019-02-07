@@ -8,13 +8,25 @@ using Sbb.Compression.Stream4ers.Pumps;
 
 namespace Sbb.Compression.Compressors
 {
-    public class MultithreadedFileCompressorCreator : ICreator<IFileCompressor>
+    public class FileCompressorCreator : ICreator<IFileCompressor>
     {
-        public virtual int BlockLength { get; set; } = 1 * 1024 * 1024; // 1 МБ
+        private const int MB = 1 * 1024 * 1024; // 1 МБ
+
+        public FileCompressorCreator() : this(MB) { }
+
+        public FileCompressorCreator(int blockLength = MB, int bufferSize = MB)
+        {
+            BlockLength = blockLength;
+            BufferSize = bufferSize;
+        }
+
+        public virtual int BlockLength { get; set; }
+
+        public virtual int BufferSize { get; set; }
 
         protected virtual Func<byte[]> ByteCreator => () => new byte[BlockLength];
 
-        public IFileCompressor Create()
+        public virtual IFileCompressor Create()
         {
             ICompressionFileOpener fileOpener = CreateFileOpener();
             IStream2StreamPump pump = CreatePump();
@@ -26,6 +38,7 @@ namespace Sbb.Compression.Compressors
         {
             return new GZipCompressionFileOpener()
             {
+                BufferSize = BufferSize,
                 SourceFileOptions = CompressionFileOpenerBase.DEFAULT_FILE_OPTIONS
                     | FileOptions.Asynchronous
             };

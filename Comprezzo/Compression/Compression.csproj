@@ -42,7 +42,7 @@
     <Compile Include="_Drafts\_OrderedByteBlock.cs" />
     <Compile Include="_Drafts\_AsyncCompressor.cs" />
     <Compile Include="Storages\AvoidingLockConcurrentStorage.cs" />
-    <Compile Include="Compressors\MultithreadedFileCompressorCreator.cs" />
+    <Compile Include="Compressors\FileCompressorCreator.cs" />
     <Compile Include="Stream4ers\BlockyStreamWriter.cs" />
     <Compile Include="_Drafts\_ByteArrayCreator.cs" />
     <Compile Include="FileOpeners\CompressionFileOpenerBase.cs" />
