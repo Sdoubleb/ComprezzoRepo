@@ -27,7 +27,7 @@ namespace Sbb.Compression.Stream4ers.Pumps
 
         public void Pump(Stream source, Stream target)
         {
-            IStorage<long, NumberedByteBlock> byteBlocks = FileReader.Read(source, StreamBlockLength);
+            ISizeableStorage<long, NumberedByteBlock> byteBlocks = FileReader.Read(source, StreamBlockLength);
             FileWriter.Write(target, StreamBlockLength, byteBlocks);
         }
     }

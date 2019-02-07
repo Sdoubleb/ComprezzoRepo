@@ -21,11 +21,9 @@ namespace Sbb.Compression.Stream4ers
 
         public INumericStorageEnumerableProvider<NumberedByteBlock> StorageEnumerableProvider { get; set; }
 
-        public void Write(Stream stream, int blockLength, IStorage<long, NumberedByteBlock> storage)
+        public void Write(Stream stream, int blockLength, ISizeableStorage<long, NumberedByteBlock> storage)
         {
-            long totalCountOfBlocks = Utils.CalculateCountOfBlocks(stream.Length, blockLength);
-            IEnumerable<NumberedByteBlock> blocks = StorageEnumerableProvider
-                .ProvideNew(storage, totalCountOfBlocks);
+            IEnumerable<NumberedByteBlock> blocks = StorageEnumerableProvider.ProvideNew(storage);
             IBlockyStreamWriter writer = StreamWriterProvider.ProvideNew(stream, _bytePool, blocks);
             writer.Write();
         }

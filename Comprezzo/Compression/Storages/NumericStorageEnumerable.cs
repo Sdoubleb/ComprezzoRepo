@@ -6,32 +6,27 @@ namespace Sbb.Compression.Storages
 {
     class NumericStorageEnumerable<TValue> : IEnumerable<TValue>
     {
-        private readonly IStorage<long, TValue> _storage;
+        private readonly ISizeableStorage<long, TValue> _storage;
 
-        public NumericStorageEnumerable(IStorage<long, TValue> storage, long totalCount)
+        public NumericStorageEnumerable(ISizeableStorage<long, TValue> storage)
         {
             _storage = storage;
-            TotalCount = totalCount;
         }
 
-        public long TotalCount { get; }
-
-        public IEnumerator<TValue> GetEnumerator() => new NumericStorageEnumerator(_storage, TotalCount);
+        public IEnumerator<TValue> GetEnumerator() => new NumericStorageEnumerator(_storage);
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public struct NumericStorageEnumerator : IEnumerator<TValue>
         {
-            private readonly IStorage<long, TValue> _storage;
-
-            private readonly long _totalCount;
+            private readonly ISizeableStorage<long, TValue> _storage;
+            
             private long _counter;
 
-            public NumericStorageEnumerator(IStorage<long, TValue> storage, long totalCount)
+            public NumericStorageEnumerator(ISizeableStorage<long, TValue> storage)
             {
                 _storage = storage;
                 _counter = 0;
-                _totalCount = totalCount;
                 Current = default(TValue);
             }
 
@@ -41,7 +36,7 @@ namespace Sbb.Compression.Storages
 
             public bool MoveNext()
             {
-                if (_counter < _totalCount)
+                if (_counter < _storage.TotalSize)
                 {
                     TValue value;
                     while (!_storage.TryGetAndRemove(_counter++, out value))
@@ -67,7 +62,7 @@ namespace Sbb.Compression.Storages
 
     class NumericStorageEnumerableProvider<TValue> : INumericStorageEnumerableProvider<TValue>
     {
-        public IEnumerable<TValue> ProvideNew(IStorage<long, TValue> storage, long totalCount)
-            => new NumericStorageEnumerable<TValue>(storage, totalCount);
+        public IEnumerable<TValue> ProvideNew(ISizeableStorage<long, TValue> storage)
+            => new NumericStorageEnumerable<TValue>(storage);
     }
 }

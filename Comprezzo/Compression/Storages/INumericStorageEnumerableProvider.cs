@@ -4,6 +4,6 @@ namespace Sbb.Compression.Storages
 {
     public interface INumericStorageEnumerableProvider<TValue>
     {
-        IEnumerable<TValue> ProvideNew(IStorage<long, TValue> storage, long totalCount);
+        IEnumerable<TValue> ProvideNew(ISizeableStorage<long, TValue> storage);
     }
 }

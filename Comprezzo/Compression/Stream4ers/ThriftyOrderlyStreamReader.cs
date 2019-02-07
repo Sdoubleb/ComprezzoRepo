@@ -20,10 +20,10 @@ namespace Sbb.Compression.Stream4ers
 
         private ISizeableStorageProvider<long, NumberedByteBlock> StorageProvider { get; set; }
 
-        public IStorage<long, NumberedByteBlock> Read(Stream stream, int blockLength)
+        public ISizeableStorage<long, NumberedByteBlock> Read(Stream stream, int blockLength)
         {
             long totalCountOfBlocks = Utils.CalculateCountOfBlocks(stream.Length, blockLength);
-            IStorage<long, NumberedByteBlock> storage = StorageProvider.ProvideNew(totalCountOfBlocks);
+            ISizeableStorage<long, NumberedByteBlock> storage = StorageProvider.ProvideNew(totalCountOfBlocks);
             IBlockyStreamReader reader = StreamReaderProvider.ProvideNew(stream, blockLength, _bytePool, storage);
             reader.Read();
             return storage;
