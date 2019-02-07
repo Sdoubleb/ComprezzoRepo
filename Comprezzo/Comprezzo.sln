@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GZipTest", "GZipTest\GZipTest.csproj", "{1A50A94E-41C1-4E7C-8E10-44200BDD85D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compression", "GZipper\Compression.csproj", "{E3470435-8018-47B4-8958-8E2003A3C19D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compression", "Compression\Compression.csproj", "{E3470435-8018-47B4-8958-8E2003A3C19D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
