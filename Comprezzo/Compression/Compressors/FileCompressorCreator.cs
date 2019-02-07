@@ -20,6 +20,7 @@ namespace Sbb.Compression.Compressors
             BufferSize = bufferSize;
         }
 
+        // TODO: попробовать определять длину блока в зависимости от длины файла
         public virtual int BlockLength { get; set; }
 
         public virtual int BufferSize { get; set; }
