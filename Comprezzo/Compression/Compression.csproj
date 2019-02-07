@@ -41,6 +41,8 @@
   <ItemGroup>
     <Compile Include="Common\IReader.cs" />
     <Compile Include="Common\IWriter.cs" />
+    <Compile Include="CompressionException.cs" />
+    <Compile Include="MemoryLacksException.cs" />
     <Compile Include="_Drafts\_OrderedByteBlock.cs" />
     <Compile Include="_Drafts\_AsyncCompressor.cs" />
     <Compile Include="Storages\AvoidingLockConcurrentStorage.cs" />

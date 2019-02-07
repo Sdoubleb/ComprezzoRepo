@@ -9,7 +9,7 @@ namespace Sbb.Compression
             return totalLength / blockLength + (totalLength % blockLength == 0 ? 0 : 1);
         }
 
-        public static float GetAvailableMemory()
+        public static float GetAvailableMemorySize()
         {
             using (var performance = new PerformanceCounter("Memory", "Available MBytes"))
             {

@@ -15,17 +15,19 @@ namespace Sbb.Compression.Storages
 
         public virtual int Define(int sizeOfElement)
         {
-            float availableMemory = GetAvailableMemory();
-            float memoryToUse = MemoryShareToUse * availableMemory;
-            float size = memoryToUse / Utils.GetSizeOfElementInMBytes(sizeOfElement);
-            return (int)size;
+            float sizeOfElementInMB = Utils.GetSizeOfElementInMBytes(sizeOfElement);
+            float memorysizeToUse = GetMemorySizeToUse();
+            if (sizeOfElementInMB > memorysizeToUse)
+                throw new MemoryLacksException("Размер элемента превышает объём доступной памяти.");
+            float poolSize = memorysizeToUse / sizeOfElementInMB;
+            return (int)poolSize;
         }
 
-        protected virtual float GetAvailableMemory()
+        protected virtual float GetMemorySizeToUse()
         {
             try
             {
-                return Utils.GetAvailableMemory();
+                return MemoryShareToUse * Utils.GetAvailableMemorySize();
             }
             catch
             {
