@@ -7,6 +7,6 @@ namespace Sbb.Compression.FileOpeners
     {
         Stream OpenSource(string sourcePath, CompressionMode mode);
 
-        Stream OpenTarget(string targetPath, CompressionMode mode);
+        Stream CreateTarget(string targetPath, CompressionMode mode);
     }
 }

@@ -30,7 +30,7 @@ namespace Sbb.Compression.Compressors
         private void Work(string inputFilePath, string outputFilePath, CompressionMode mode)
         {
             using (Stream source = FileOpener.OpenSource(inputFilePath, mode))
-            using (Stream target = FileOpener.OpenTarget(outputFilePath, mode))
+            using (Stream target = FileOpener.CreateTarget(outputFilePath, mode))
             {
                 Work(source, target);
             }

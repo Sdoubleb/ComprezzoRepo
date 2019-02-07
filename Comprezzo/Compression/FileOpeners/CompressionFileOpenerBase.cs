@@ -45,24 +45,12 @@ namespace Sbb.Compression.FileOpeners
                 : CreateCompressionStream(source, mode);
         }
 
-        public Stream OpenTarget(string targetPath, CompressionMode mode)
+        public Stream CreateTarget(string targetPath, CompressionMode mode)
         {
             CorrectCompressionPath(ref targetPath, mode);
-            Stream target = OpenTarget(targetPath);
+            Stream target = CreateTarget(targetPath);
             return mode == CompressionMode.Compress
                 ? CreateCompressionStream(target, mode) : target;
-        }
-
-        private Stream OpenSource(string sourcePath)
-        {
-            return new FileStream(sourcePath, FileMode.Open, FileAccess.Read,
-                SourceFileShare, BufferSize, SourceFileOptions);
-        }
-
-        private Stream OpenTarget(string targetPath)
-        {
-            return new FileStream(targetPath, FileMode.Create, FileAccess.Write,
-                TargetFileShare, BufferSize, TargetFileOptions);
         }
 
         protected virtual void CorrectCompressionPath(ref string initialPath, CompressionMode mode)
@@ -72,6 +60,42 @@ namespace Sbb.Compression.FileOpeners
                 StringComparison.InvariantCultureIgnoreCase))
             {
                 initialPath = initialPath + CompressionExtension;
+            }
+        }
+
+        private Stream OpenSource(string sourcePath)
+        {
+            Func<string, FileStream> opener = path => new FileStream(path, FileMode.Open, FileAccess.Read,
+                SourceFileShare, BufferSize, SourceFileOptions);
+            return CreateFileStream(sourcePath, opener);
+        }
+
+        private Stream CreateTarget(string targetPath)
+        {
+            Func<string, FileStream> creator = path => new FileStream(path, FileMode.Create, FileAccess.Write,
+                TargetFileShare, BufferSize, TargetFileOptions);
+            return CreateFileStream(targetPath, creator);
+        }
+
+        private FileStream CreateFileStream(string path, Func<string, FileStream> creator)
+        {
+            try
+            {
+                return creator(path);
+            }
+            catch (ArgumentException exception)
+            {
+                throw new CompressionException($"Неправильно задан путь к файлу '{path}'"
+                    + " либо другие настройки открытия файлового потока.", exception);
+            }
+            catch (IOException exception)
+            {
+                throw new CompressionException($"Не найден файл '{path}'"
+                    + " либо длина пути превышает допустимый размер.", exception);
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                throw new CompressionException($"Отсутствует доступ к файлу '{path}'.", exception);
             }
         }
 
