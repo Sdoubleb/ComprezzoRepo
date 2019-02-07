@@ -5,7 +5,7 @@ using Sbb.Compression.Common;
 
 namespace Sbb.Compression.Storages
 {
-    class ObjectPool<T> : IWaitableObjectPool<T>, IDisposable where T : class
+    public class ObjectPool<T> : IWaitableObjectPool<T>, IDisposable where T : class
     {
         private readonly Func<T> _creator;
         private readonly Action<T> _cleaner;
@@ -66,12 +66,12 @@ namespace Sbb.Compression.Storages
         public void Dispose() => _semaphore.Close();
     }
 
-    class SizeDefiningObjectPoolProvider<T> : IWaitableObjectPoolProvider<T> where T : class
+    public class SizeDefiningObjectPoolProvider<T> : IWaitableObjectPoolProvider<T> where T : class
     {
         private readonly Func<T> _creator;
         private readonly Action<T> _cleaner;
         
-        public int _sizeOfElement;
+        private int _sizeOfElement;
 
         public SizeDefiningObjectPoolProvider(int sizeOfElement, ICreator<T> creator, ICleaner<T> cleaner = null)
             : this(sizeOfElement, () => creator.Create(), obj => cleaner.Clean(obj)) { }

@@ -5,7 +5,7 @@ using Sbb.Compression.Storages;
 
 namespace Sbb.Compression.Stream4ers
 {
-    class ThriftyBlockyStreamWriter : IBlockyStreamWriter
+    public class ThriftyBlockyStreamWriter : IBlockyStreamWriter
     {
         private readonly IObjectPool<byte[]> _bytePool;
 

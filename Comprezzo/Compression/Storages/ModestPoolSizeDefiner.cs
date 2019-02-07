@@ -1,6 +1,6 @@
 ﻿namespace Sbb.Compression.Storages
 {
-    class ModestPoolSizeDefiner : IPoolSizeDefiner
+    public class ModestPoolSizeDefiner : IPoolSizeDefiner
     {
         // для начала будем использовать такую долю доступной памяти
         private const float DEFAULT_MEMORY_SHARE_TO_USE = 1 / 4F;

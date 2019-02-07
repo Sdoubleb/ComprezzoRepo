@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Sbb.Compression.Storages
 {
-    class NumericStorageEnumerable<TValue> : IEnumerable<TValue>
+    public class NumericStorageEnumerable<TValue> : IEnumerable<TValue>
     {
         private readonly ISizeableStorage<long, TValue> _storage;
 
@@ -60,7 +60,7 @@ namespace Sbb.Compression.Storages
         }
     }
 
-    class NumericStorageEnumerableProvider<TValue> : INumericStorageEnumerableProvider<TValue>
+    public class NumericStorageEnumerableProvider<TValue> : INumericStorageEnumerableProvider<TValue>
     {
         public IEnumerable<TValue> ProvideNew(ISizeableStorage<long, TValue> storage)
             => new NumericStorageEnumerable<TValue>(storage);

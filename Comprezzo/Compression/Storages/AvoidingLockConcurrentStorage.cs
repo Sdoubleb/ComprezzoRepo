@@ -1,6 +1,6 @@
 ﻿namespace Sbb.Compression.Storages
 {
-    class AvoidingLockConcurrentStorage<TValue> : ISizeableStorage<long, TValue>
+    public class AvoidingLockConcurrentStorage<TValue> : ISizeableStorage<long, TValue>
     {
         internal const int DEFAULT_SIZE_OF_SUBSTORAGE = 12;
 
@@ -43,7 +43,7 @@
         }
     }
 
-    class AvoidingLockConcurrentStorageProvider<TValue> : ISizeableStorageProvider<long, TValue>
+    public class AvoidingLockConcurrentStorageProvider<TValue> : ISizeableStorageProvider<long, TValue>
     {
         private readonly int _sizeOfSubstorage;
 

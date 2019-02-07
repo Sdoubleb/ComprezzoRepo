@@ -15,7 +15,9 @@ namespace Sbb.Compression.Stream4ers
 
         private readonly IWaitableObjectPool<byte[]> _bytePool;
         private readonly IStorage<long, NumberedByteBlock> _byteBlocks;
-
+        
+        private IThreadProvider _threadProvider;
+        
         private readonly object _locker = new object();
 
         public AsyncBlockyStreamReader(Stream stream, int blockLength,
@@ -26,14 +28,12 @@ namespace Sbb.Compression.Stream4ers
             _blockLength = blockLength;
             _bytePool = bytePool;
             _byteBlocks = byteBlocks;
-            ThreadProvider = threadProvider;
+            _threadProvider = threadProvider;
         }
-
-        public IThreadProvider ThreadProvider { get; set; }
 
         public void Read()
         {
-            Thread[] threads = ThreadProvider.Provide(new ThreadStart(BeginReadingBlock));
+            Thread[] threads = _threadProvider.Provide(new ThreadStart(BeginReadingBlock));
             Array.ForEach(threads, t => t.Start());
         }
 

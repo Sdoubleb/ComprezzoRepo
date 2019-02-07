@@ -2,7 +2,7 @@
 
 namespace Sbb.Compression.Stream4ers
 {
-    class ThriftyBlockyStream4erFactory : IBlockyStream4erFactory
+    public class ThriftyBlockyStream4erFactory : IBlockyStream4erFactory
     {
         public ThriftyBlockyStream4erFactory(IStreamReaderProvider readerProvider,
             IStreamWriterProvider writerProvider,
@@ -12,20 +12,20 @@ namespace Sbb.Compression.Stream4ers
         {
             ReaderProvider = readerProvider;
             WriterProvider = writerProvider;
-            PoolProvider = poolProvider;
             StorageProvider = storageProvider;
             StorageEnumerableProvider = storageEnumerableProvider;
+            PoolProvider = poolProvider;
         }
 
         public IStreamReaderProvider ReaderProvider { get; set; }
 
         public IStreamWriterProvider WriterProvider { get; set; }
 
-        public IWaitableObjectPoolProvider<byte[]> PoolProvider { get; set; }
-
         public ISizeableStorageProvider<long, NumberedByteBlock> StorageProvider { get; set; }
 
         public INumericStorageEnumerableProvider<NumberedByteBlock> StorageEnumerableProvider { get; set; }
+
+        public IWaitableObjectPoolProvider<byte[]> PoolProvider { get; set; }
 
         public BlockyStream4erPair CreateStream4erPair()
         {

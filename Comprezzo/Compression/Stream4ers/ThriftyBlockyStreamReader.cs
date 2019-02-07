@@ -4,7 +4,7 @@ using Sbb.Compression.Storages;
 
 namespace Sbb.Compression.Stream4ers
 {
-    class ThriftyBlockyStreamReader : IBlockyStreamReader
+    public class ThriftyBlockyStreamReader : IBlockyStreamReader
     {
         private readonly IWaitableObjectPool<byte[]> _bytePool;
 
@@ -17,9 +17,9 @@ namespace Sbb.Compression.Stream4ers
             StorageProvider = storageProvider;
         }
 
-        private IStreamReaderProvider StreamReaderProvider { get; set; }
+        public IStreamReaderProvider StreamReaderProvider { get; set; }
 
-        private ISizeableStorageProvider<long, NumberedByteBlock> StorageProvider { get; set; }
+        public ISizeableStorageProvider<long, NumberedByteBlock> StorageProvider { get; set; }
 
         public ISizeableStorage<long, NumberedByteBlock> Read(Stream stream, int blockLength)
         {
