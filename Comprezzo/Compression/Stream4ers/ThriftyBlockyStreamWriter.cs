@@ -28,5 +28,7 @@ namespace Sbb.Compression.Stream4ers
             IWriter writer = StreamWriterProvider.ProvideNew(stream, _bytePool, blocks);
             writer.Write();
         }
+
+        public void Dispose() => _bytePool.Dispose();
     }
 }

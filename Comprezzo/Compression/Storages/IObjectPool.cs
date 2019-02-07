@@ -1,6 +1,8 @@
-﻿namespace Sbb.Compression.Storages
+﻿using System;
+
+namespace Sbb.Compression.Storages
 {
-    public interface IObjectPool<T> where T : class
+    public interface IObjectPool<T> : IDisposable where T : class
     {
         T Get();
 

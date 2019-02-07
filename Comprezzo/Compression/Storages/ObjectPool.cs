@@ -5,7 +5,7 @@ using Sbb.Compression.Common;
 
 namespace Sbb.Compression.Storages
 {
-    public class ObjectPool<T> : IWaitableObjectPool<T>, IDisposable where T : class
+    public class ObjectPool<T> : IWaitableObjectPool<T> where T : class
     {
         private readonly Func<T> _creator;
         private readonly Action<T> _cleaner;

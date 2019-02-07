@@ -56,7 +56,7 @@ namespace Sbb.Compression.Storages
                 }
             }
 
-            public void Dispose() => Reset();
+            public void Dispose() { }
         }
     }
 

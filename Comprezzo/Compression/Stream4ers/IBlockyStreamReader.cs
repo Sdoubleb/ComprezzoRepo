@@ -1,9 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Sbb.Compression.Storages;
 
 namespace Sbb.Compression.Stream4ers
 {
-    public interface IBlockyStreamReader
+    public interface IBlockyStreamReader : IDisposable
     {
         ISizeableStorage<long, NumberedByteBlock> Read(Stream stream, int blockLength);
     }

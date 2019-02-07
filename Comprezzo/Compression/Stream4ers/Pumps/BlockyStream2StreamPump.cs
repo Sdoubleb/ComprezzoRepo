@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Sbb.Compression.Storages;
 
 namespace Sbb.Compression.Stream4ers.Pumps
@@ -25,6 +26,12 @@ namespace Sbb.Compression.Stream4ers.Pumps
         {
             ISizeableStorage<long, NumberedByteBlock> byteBlocks = _reader.Read(source, BlockLength);
             _writer.Write(target, BlockLength, byteBlocks);
+        }
+
+        public void Dispose()
+        {
+            _reader.Dispose();
+            _writer.Dispose();
         }
     }
 }

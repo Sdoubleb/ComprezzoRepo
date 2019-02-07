@@ -40,5 +40,7 @@ namespace Sbb.Compression.Compressors
         {
             _pump.Pump(source, target);
         }
+
+        public void Dispose() => _pump.Dispose();
     }
 }

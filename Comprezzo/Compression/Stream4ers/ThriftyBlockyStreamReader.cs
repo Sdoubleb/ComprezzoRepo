@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Sbb.Compression.Common;
 using Sbb.Compression.Storages;
 
@@ -29,5 +30,7 @@ namespace Sbb.Compression.Stream4ers
             reader.Read();
             return storage;
         }
+
+        public void Dispose() => _bytePool.Dispose();
     }
 }

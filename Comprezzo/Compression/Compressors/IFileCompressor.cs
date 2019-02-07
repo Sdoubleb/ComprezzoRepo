@@ -1,6 +1,8 @@
-﻿namespace Sbb.Compression.Compressors
+﻿using System;
+
+namespace Sbb.Compression.Compressors
 {
-    public interface IFileCompressor
+    public interface IFileCompressor : IDisposable
     {
         void Compress(string inputFilePath, string outputFilePath);
 
