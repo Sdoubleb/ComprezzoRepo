@@ -43,9 +43,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GZipper\GZipper.csproj">
+    <ProjectReference Include="..\GZipper\Compression.csproj">
       <Project>{e3470435-8018-47b4-8958-8e2003a3c19d}</Project>
-      <Name>GZipper</Name>
+      <Name>Compression</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

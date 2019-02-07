@@ -1,13 +1,21 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
 
-namespace GZipper
+namespace Sbb.Compression
 {
     static class Utils
     {
-        public static long CalculateCountOfStreamBlocks(Stream stream, int blockLength)
+        public static long CalculateCountOfBlocks(long totalLength, long blockLength)
         {
-            return stream.Length / blockLength
-                + (stream.Length % blockLength == 0 ? 0 : 1);
+            return totalLength / blockLength + (totalLength % blockLength == 0 ? 0 : 1);
+        }
+
+        public static float GetAvailableMemory()
+        {
+            using (var performance = new PerformanceCounter("Memory", "Available MBytes"))
+            {
+                float availableMBytes = performance.NextValue();
+                return availableMBytes;
+            }
         }
     }
 }

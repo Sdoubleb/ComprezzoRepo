@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E3470435-8018-47B4-8958-8E2003A3C19D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sbb.Compression</RootNamespace>
+    <AssemblyName>Compression</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="_Drafts\_OrderedByteBlock.cs" />
+    <Compile Include="_Drafts\_AsyncCompressor.cs" />
+    <Compile Include="Storages\AvoidingLockConcurrentStorage.cs" />
+    <Compile Include="Compressors\MultithreadedFileCompressorCreator.cs" />
+    <Compile Include="Stream4ers\BlockyStreamWriter.cs" />
+    <Compile Include="_Drafts\_ByteArrayCreator.cs" />
+    <Compile Include="FileOpeners\CompressionFileOpenerBase.cs" />
+    <Compile Include="Compressors\FileCompressor.cs" />
+    <Compile Include="FileOpeners\GZipCompressionFileOpener.cs" />
+    <Compile Include="Common\ICleaner.cs" />
+    <Compile Include="FileOpeners\ICompressionFileOpener.cs" />
+    <Compile Include="Common\ICreator.cs" />
+    <Compile Include="Compressors\IFileCompressor.cs" />
+    <Compile Include="Storages\INumericStorageEnumerableProvider.cs" />
+    <Compile Include="Storages\IObjectPool.cs" />
+    <Compile Include="Stream4ers\IOrderlyStream4erFactory.cs" />
+    <Compile Include="Stream4ers\IOrderlyStreamReader.cs" />
+    <Compile Include="Stream4ers\IOrderlyStreamWriter.cs" />
+    <Compile Include="Stream4ers\IBlockyStreamReader.cs" />
+    <Compile Include="Storages\IPoolSizeDefiner.cs" />
+    <Compile Include="Storages\IStorage.cs" />
+    <Compile Include="Stream4ers\Pumps\IStream2StreamPump.cs" />
+    <Compile Include="Stream4ers\IBlockyStreamWriter.cs" />
+    <Compile Include="Common\IThreadProvider.cs" />
+    <Compile Include="_Drafts\_MultithreadedCompressor.cs" />
+    <Compile Include="Storages\ObjectPool.cs" />
+    <Compile Include="NumberedByteBlock.cs" />
+    <Compile Include="Storages\ConcurrentStorage.cs" />
+    <Compile Include="_Drafts\_ConcurrentQueue.cs" />
+    <Compile Include="Stream4ers\OrderlyStream4erPair.cs" />
+    <Compile Include="Storages\ModestPoolSizeDefiner.cs" />
+    <Compile Include="_Drafts\_ProducerConsumerCompressor.cs" />
+    <Compile Include="_Drafts\_ProducerConsumerQueue.cs" />
+    <Compile Include="_Drafts\_SingleThreadCompressor.cs" />
+    <Compile Include="_Drafts\_ICompressor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stream4ers\AsyncBlockyStreamReader.cs" />
+    <Compile Include="Storages\NumericStorageEnumerable.cs" />
+    <Compile Include="Stream4ers\Pumps\BlockyStream2StreamPump.cs" />
+    <Compile Include="Common\ThreadProvider.cs" />
+    <Compile Include="Stream4ers\ThriftyOrderlyStream4erFactory.cs" />
+    <Compile Include="Stream4ers\ThriftyOrderlyStreamReader.cs" />
+    <Compile Include="Stream4ers\ThriftyOrderlyStreamWriter.cs" />
+    <Compile Include="Utils.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
