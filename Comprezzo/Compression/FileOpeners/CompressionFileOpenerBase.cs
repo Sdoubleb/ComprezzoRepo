@@ -11,7 +11,7 @@ namespace Sbb.Compression.FileOpeners
         public const FileShare DEFAULT_SOURCE_FILE_SHARE = FileShare.Read;
         public const FileShare DEFAULT_TARGET_FILE_SHARE = FileShare.None;
 
-        public const FileOptions DEFAULT_FILE_OPTIONS = default(FileOptions);
+        public const FileOptions DEFAULT_FILE_OPTIONS = FileOptions.SequentialScan;
 
         protected CompressionFileOpenerBase() : this(DEFAULT_BUFFER_SIZE) { }
 

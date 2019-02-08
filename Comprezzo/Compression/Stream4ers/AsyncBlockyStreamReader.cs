@@ -49,16 +49,16 @@ namespace Sbb.Compression.Stream4ers
 
         private void EndReadingBlock(IAsyncResult asyncResult)
         {
-            bool continueReading = false;
             var block = (NumberedByteBlock)asyncResult.AsyncState;
             if ((block.Length = _stream.EndRead(asyncResult)) > 0)
             {
                 _byteBlocks.Add(block.Number, block);
-                continueReading = true;
-            }
-            _bytePool.Release(block.Bytes);
-            if(continueReading)
                 BeginReadingBlock();
+            }
+            else
+            {
+                _bytePool.Release(block.Bytes);
+            }
         }
     }
 

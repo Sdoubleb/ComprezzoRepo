@@ -3,8 +3,7 @@
     public class AvoidingLockConcurrentStorage<TValue> : ISizeableStorage<long, TValue>
     {
         internal const int DEFAULT_SIZE_OF_SUBSTORAGE = 12;
-
-        private readonly long _totalCountOfElements;
+        
         private readonly int _sizeOfSubstorage;
 
         private readonly ConcurrentStorage<long, TValue>[] _substorages;
@@ -14,8 +13,8 @@
 
         public AvoidingLockConcurrentStorage(long totalCountOfElements, int sizeOfSubstorage)
         {
-            _totalCountOfElements = totalCountOfElements;
             _sizeOfSubstorage = sizeOfSubstorage;
+            TotalSize = totalCountOfElements;
 
             long countOfSubstorages = Utils.CalculateCountOfBlocks(totalCountOfElements, sizeOfSubstorage);
 
@@ -24,7 +23,7 @@
                 _substorages[i] = new ConcurrentStorage<long, TValue>();
         }
 
-        public long TotalSize => _totalCountOfElements;
+        public long TotalSize { get; }
 
         public void Add(long key, TValue value)
         {
@@ -57,7 +56,7 @@
 
         public ISizeableStorage<long, TValue> ProvideNew(long totalCountOfElements)
         {
-            return new AvoidingLockConcurrentStorage<TValue>(_sizeOfSubstorage);
+            return new AvoidingLockConcurrentStorage<TValue>(totalCountOfElements, _sizeOfSubstorage);
         }
     }
 }

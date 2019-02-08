@@ -39,9 +39,10 @@ namespace Sbb.Compression.Storages
                 if (_counter < _storage.TotalSize)
                 {
                     TValue value;
-                    while (!_storage.TryGetAndRemove(_counter++, out value))
+                    while (!_storage.TryGetAndRemove(_counter, out value))
                         continue;
                     Current = value;
+                    _counter++;
                     return true;
                 }
                 return false;
