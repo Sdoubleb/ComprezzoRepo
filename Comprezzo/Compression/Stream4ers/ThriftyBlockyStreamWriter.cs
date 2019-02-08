@@ -5,6 +5,11 @@ using Sbb.Compression.Storages;
 
 namespace Sbb.Compression.Stream4ers
 {
+    // содержит высокоуровневую реализацию;
+    // принимает хранилище считанных байтовых блоков и возвращает записанные байты в пул
+    /// <summary>
+    /// Ѕережливый поблочный писатель байтовых потоков.
+    /// </summary>
     public class ThriftyBlockyStreamWriter : IBlockyStreamWriter
     {
         private readonly IObjectPool<byte[]> _bytePool;
@@ -22,6 +27,7 @@ namespace Sbb.Compression.Stream4ers
 
         public INumericStorageEnumerableProvider<NumberedByteBlock> StorageEnumerableProvider { get; set; }
 
+        /// <param name="blockLength">ƒлина единоразово записываемого байтового массива.</param>
         public void Write(Stream stream, int blockLength, ISizeableStorage<long, NumberedByteBlock> storage)
         {
             IEnumerable<NumberedByteBlock> blocks = StorageEnumerableProvider.ProvideNew(storage);

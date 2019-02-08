@@ -6,12 +6,18 @@ using Sbb.Compression.Storages;
 
 namespace Sbb.Compression.Stream4ers
 {
+    // низкоуровневая реализация читателя потока;
+    // чтение выполняется асинхронно;
+    // для чтения используется несколько потоков;
+    // байтовые массивы, представляющие блоки,
+    // берутся из пула и после чтения складываются в хранилище
+    // с номерами блоков в качестве ключей
     class AsyncMlthrdStreamReader : IReader
     {
         private readonly Stream _stream;
 
         private readonly int _blockLength;
-        private long _currentBlockNumber;
+        private long _currentBlockNumber; // номер текущего считываемого блока
 
         private readonly IWaitableObjectPool<byte[]> _bytePool;
         private readonly IStorage<long, NumberedByteBlock> _byteBlocks;
@@ -42,6 +48,10 @@ namespace Sbb.Compression.Stream4ers
             byte[] bytes = _bytePool.Wait();
             lock (_locker)
             {
+                // поскольку в отдельно взятый момент времени доступ к байтовому потоку
+                // имеет только один поток времени выполнения,
+                // нет необходимости синхронизировать сам объект байтового потока;
+                // то же самое касается потокобезопасного инкремента счётчика
                 _stream.BeginRead(bytes, 0, bytes.Length, new AsyncCallback(EndReadingBlock),
                     new NumberedByteBlock(_currentBlockNumber++, bytes));
             }
@@ -50,6 +60,10 @@ namespace Sbb.Compression.Stream4ers
         private void EndReadingBlock(IAsyncResult asyncResult)
         {
             var block = (NumberedByteBlock)asyncResult.AsyncState;
+
+            // после смещения позиции байтового потока до конца,
+            // потоки времени выполнения будут ещё некоторое время пытаться прочитать его,
+            // пока не осознают, что читать уже нечего и не прекратят свой жизненный путь
             if ((block.Length = _stream.EndRead(asyncResult)) > 0)
             {
                 _byteBlocks.Add(block.Number, block);

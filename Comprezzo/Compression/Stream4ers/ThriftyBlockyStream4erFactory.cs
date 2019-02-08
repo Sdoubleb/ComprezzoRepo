@@ -2,6 +2,12 @@
 
 namespace Sbb.Compression.Stream4ers
 {
+    /// <summary>
+    /// Фабрика по созданию пары из бережлиых поблочных чтеца и писца байтовых потоков.
+    /// Использует поставщиков низкоуровневых читателя и писателя байтовых потоков,
+    /// поставщиков нумерованного хранилища считанных блоков байтов и его перечислителя
+    /// и поставщика пула байтовых массивов.
+    /// </summary>
     public class ThriftyBlockyStream4erFactory : IBlockyStream4erFactory
     {
         public ThriftyBlockyStream4erFactory(IStreamReaderProvider readerProvider,

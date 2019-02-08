@@ -1,10 +1,14 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Sbb.Compression.Common;
 using Sbb.Compression.Storages;
 
 namespace Sbb.Compression.Stream4ers
 {
+    // содержит высокоуровневую реализацию;
+    // принимает байтовый пул и возвращает хранилище считанных байтовых блоков
+    /// <summary>
+    /// Бережливый поблочный читатель байтовых потоков.
+    /// </summary>
     public class ThriftyBlockyStreamReader : IBlockyStreamReader
     {
         private readonly IWaitableObjectPool<byte[]> _bytePool;
@@ -22,6 +26,7 @@ namespace Sbb.Compression.Stream4ers
 
         public ISizeableStorageProvider<long, NumberedByteBlock> StorageProvider { get; set; }
 
+        /// <param name="blockLength">Длина единоразово считываемого байтового массива.</param>
         public ISizeableStorage<long, NumberedByteBlock> Read(Stream stream, int blockLength)
         {
             long totalCountOfBlocks = Utils.CalculateCountOfBlocks(stream.Length, blockLength);

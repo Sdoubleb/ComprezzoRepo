@@ -53,6 +53,7 @@ namespace Sbb.Compression.Compressors
             }
             catch (MemoryLacksException exception)
             {
+                // TODO: пробовать уменьшать длину блока
                 throw new MemoryLacksException("Длина блока, выбранная для чтения файла,"
                     + " превышает объём доступной памяти.", exception);
             }
