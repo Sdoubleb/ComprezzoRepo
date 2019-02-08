@@ -6,20 +6,19 @@ namespace Sbb.Compression.Stream4ers.Pumps
 {
     class BlockyStream2StreamPump : IStream2StreamPump
     {
-        public const int DEFAULT_BLOCK_LENGTH = 1 * 1024 * 1024; // 1 МБ
-
-        public int BlockLength { get; set; } = DEFAULT_BLOCK_LENGTH;
+        public int BlockLength { get; set; }
 
         private IBlockyStreamReader _reader;
         private IBlockyStreamWriter _writer;
 
-        public BlockyStream2StreamPump(IBlockyStream4erFactory stream4erFactory)
-            : this(stream4erFactory.CreateStream4erPair()) { }
+        public BlockyStream2StreamPump(IBlockyStream4erFactory stream4erFactory, int blockLength)
+            : this(stream4erFactory.CreateStream4erPair(), blockLength) { }
 
-        public BlockyStream2StreamPump(BlockyStream4erPair stream4erPair)
+        public BlockyStream2StreamPump(BlockyStream4erPair stream4erPair, int blockLength)
         {
             _reader = stream4erPair.StreamReader;
             _writer = stream4erPair.StreamWriter;
+            BlockLength = blockLength;
         }
 
         public virtual void Pump(Stream source, Stream target)

@@ -37,9 +37,8 @@ namespace Sbb.Compression.Compressors
 
         protected virtual ICompressionFileOpener CreateFileOpener()
         {
-            return new GZipCompressionFileOpener()
+            return new GZipCompressionFileOpener(BufferSize)
             {
-                BufferSize = BufferSize,
                 SourceFileOptions = CompressionFileOpenerBase.DEFAULT_FILE_OPTIONS
                     | FileOptions.Asynchronous
             };
@@ -48,7 +47,7 @@ namespace Sbb.Compression.Compressors
         protected virtual IStream2StreamPump CreatePump()
         {
             IBlockyStream4erFactory stream4erFactory = CreateStream4erFactory();
-            return new BlockyStream2StreamPump(stream4erFactory);
+            return new BlockyStream2StreamPump(stream4erFactory, BlockLength);
         }
 
         protected virtual IBlockyStream4erFactory CreateStream4erFactory()
