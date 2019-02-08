@@ -10,10 +10,10 @@ namespace Sbb.Compression.Storages
     public class ModestPoolSizeDefiner : IPoolSizeDefiner
     {
         // доля доступной памяти о умолчанию, которую можно использовать под пул
-        private const float DEFAULT_MEMORY_SHARE_TO_USE = 1 / 4F;
+        protected const float DEFAULT_MEMORY_SHARE_TO_USE = 1 / 4F;
 
         // объём памяти по умолчанию, которую можно использовать под пул
-        private const float DEFAULT_MEMORY_SIZE = 256;
+        protected const float DEFAULT_MEMORY_SIZE = 256;
 
         /// <summary>
         /// Доля доступной памяти, которую можно использовать под пул.

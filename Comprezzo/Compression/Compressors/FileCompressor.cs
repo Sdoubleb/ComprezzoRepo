@@ -10,7 +10,7 @@ namespace Sbb.Compression.Compressors
     /// </summary>
     public class FileCompressor : IFileCompressor
     {
-        private readonly IStream2StreamPump _pump;
+        protected readonly IStream2StreamPump _pump;
 
         public FileCompressor(ICompressionFileOpener fileOpener, IStream2StreamPump pump)
         {

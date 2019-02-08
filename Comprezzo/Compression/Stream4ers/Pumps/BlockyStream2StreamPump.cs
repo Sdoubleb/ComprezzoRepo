@@ -13,8 +13,8 @@ namespace Sbb.Compression.Stream4ers.Pumps
         /// </summary>
         public int BlockLength { get; set; }
 
-        private IBlockyStreamReader _reader;
-        private IBlockyStreamWriter _writer;
+        protected IBlockyStreamReader _reader;
+        protected IBlockyStreamWriter _writer;
 
         /// <param name="blockLength">
         /// Длина блока в байтах, единоразово перекачивающегося из одного потока в другой.
