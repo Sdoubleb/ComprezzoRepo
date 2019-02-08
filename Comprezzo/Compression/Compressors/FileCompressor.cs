@@ -36,6 +36,8 @@ namespace Sbb.Compression.Compressors
             Work(inputFilePath, outputFilePath, CompressionMode.Decompress);
         }
 
+        // TODO: ходят слухи, что существуют тайные магические знания
+        // по обработке OutOfMemoryException - попробовать применить их здесь
         private void Work(string inputFilePath, string outputFilePath, CompressionMode mode)
         {
             using (Stream source = FileOpener.OpenSource(inputFilePath, mode))
