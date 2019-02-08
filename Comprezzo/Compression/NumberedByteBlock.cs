@@ -1,5 +1,8 @@
 ﻿namespace Sbb.Compression
 {
+    /// <summary>
+    /// Нумерованный массив байтов.
+    /// </summary>
     public class NumberedByteBlock
     {
         public NumberedByteBlock(long number, byte[] bytes)
