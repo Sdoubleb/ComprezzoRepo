@@ -5,14 +5,14 @@ using Sbb.Compression.Storages;
 
 namespace Sbb.Compression.Stream4ers
 {
-    class SyncBlockyStreamWriter : IWriter
+    class SnglthrdStreamWriter : IWriter
     {
         private readonly Stream _stream;
 
         private readonly IObjectPool<byte[]> _bytePool;
         private readonly IEnumerable<NumberedByteBlock> _byteBlocks;
 
-        public SyncBlockyStreamWriter(Stream stream,
+        public SnglthrdStreamWriter(Stream stream,
             IObjectPool<byte[]> bytePool, IEnumerable<NumberedByteBlock> byteBlocks)
         {
             _stream = stream;
@@ -33,12 +33,12 @@ namespace Sbb.Compression.Stream4ers
         }
     }
 
-    class BlockyStreamWriterProvider : IStreamWriterProvider
+    class SnglthrdStreamWriterProvider : IStreamWriterProvider
     {
         public IWriter ProvideNew(Stream stream,
             IObjectPool<byte[]> bytePool, IEnumerable<NumberedByteBlock> byteBlocks)
         {
-            return new SyncBlockyStreamWriter(stream, bytePool, byteBlocks);
+            return new SnglthrdStreamWriter(stream, bytePool, byteBlocks);
         }
     }
 }

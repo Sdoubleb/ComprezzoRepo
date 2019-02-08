@@ -64,12 +64,12 @@ namespace Sbb.Compression.Compressors
 
         protected virtual IStreamReaderProvider CreateReaderProvider()
         {
-            return new AsyncBlockyStreamReaderProvider();
+            return new AsyncMlthrdStreamReaderProvider();
         }
 
         protected virtual IStreamWriterProvider CreateWriterProvider()
         {
-            return new BlockyStreamWriterProvider();
+            return new SnglthrdStreamWriterProvider();
         }
 
         protected virtual ISizeableStorageProvider<long, NumberedByteBlock> CreateStorageProvider()
