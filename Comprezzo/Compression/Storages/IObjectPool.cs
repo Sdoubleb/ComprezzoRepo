@@ -9,6 +9,9 @@ namespace Sbb.Compression.Storages
         void Release(T obj);
     }
 
+    /// <summary>
+    /// Интерфейс объектного пула, поддерживающего операцию ожидания объекта.
+    /// </summary>
     public interface IWaitableObjectPool<T> : IObjectPool<T> where T : class
     {
         T Wait();

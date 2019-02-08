@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Sbb.Compression.Storages
 {
+    /// <summary>
+    /// ѕеречислитель значений временного хранилища с числовым ключом.
+    /// </summary>
     public class NumericStorageEnumerable<TValue> : IEnumerable<TValue>
     {
         private readonly ISizeableStorage<long, TValue> _storage;
@@ -53,11 +56,12 @@ namespace Sbb.Compression.Storages
                 if (_counter > 0)
                 {
                     throw new ObjectDisposedException(objectName: GetType().FullName,
-                        message: $"ѕеречисление значений временного хранилища {_storage.GetType()} можно выполнить только единожды.");
+                        message: $"ѕеречисление значений временного хранилища {_storage.GetType()}"
+                            + " можно выполнить только единожды.");
                 }
             }
 
-            public void Dispose() { }
+            void IDisposable.Dispose() { }
         }
     }
 

@@ -20,7 +20,7 @@ namespace Sbb.Compression.Stream4ers
             _byteBlocks = byteBlocks;
         }
 
-        public void Write()
+        public virtual void Write()
         {
             foreach (var block in _byteBlocks)
             {

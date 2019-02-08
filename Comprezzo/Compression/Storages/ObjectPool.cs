@@ -5,30 +5,43 @@ using Sbb.Compression.Common;
 
 namespace Sbb.Compression.Storages
 {
+    /// <summary>
+    /// Объектный пул, поддерживающий операцию ожидания объекта.
+    /// </summary>
     public class ObjectPool<T> : IWaitableObjectPool<T> where T : class
     {
         private readonly Func<T> _creator;
         private readonly Action<T> _cleaner;
         
+        // внутренняя очередь (массив, список - нужное подчеркнуть)
         private readonly Queue<T> _pool = new Queue<T>();
 
+        // максимально допустимое число объектов, которые может создать пул
         private readonly int _maxCount;
+
+        // текущее число объектов, которые создал пул
         private int _currentCount;
 
         private readonly object _locker = new object();
-        private readonly Semaphore _semaphore;
+        private readonly Semaphore _semaphore; // позволяет ожидать объект
 
+        /// <param name="maxCount">Максимальне число объектов, которые может создать пул.</param>
         public ObjectPool(ICreator<T> creator, ICleaner<T> cleaner = null, int maxCount = Int32.MaxValue)
             : this(() => creator.Create(), obj => cleaner.Clean(obj), maxCount) { }
 
+        /// <param name="maxCount">Максимальне число объектов, которые может создать пул.</param>
         public ObjectPool(Func<T> creator, Action<T> cleaner = null, int maxCount = Int32.MaxValue)
         {
-            _creator = creator;
+            _creator = creator ?? throw new ArgumentNullException(paramName: nameof(creator));
             _cleaner = cleaner;
             _maxCount = maxCount;
             _semaphore = new Semaphore(0, maxCount);
         }
 
+        /// <summary>
+        /// Возвращает объект пула или значение <c>null</c>,
+        /// если объект на данный момент отсутствует.
+        /// </summary>
         public T Get()
         {
             lock (_locker)
@@ -45,6 +58,13 @@ namespace Sbb.Compression.Storages
             return null;
         }
 
+        /// <summary>
+        /// Ожидает освобождения объекта пула и возвращает его.
+        /// </summary>
+        /// <remarks>
+        /// При текущей реализации имеет смысл вызывать,
+        /// только будучи безоговорочно уверенным в том, что дождёшься.
+        /// </remarks>
         public T Wait()
         {
             T obj;
@@ -66,6 +86,12 @@ namespace Sbb.Compression.Storages
         public void Dispose() => _semaphore.Close();
     }
 
+    /// <summary>
+    /// Обязан по запросу предоставить объектный пул в трезвом уме и добром здравии.
+    /// Обязан знать объём занимаемой одним объект пула памяти,
+    /// дабы рассчитать максимальное число элементов, которые может создать пул,
+    /// исходя из объёма наличествующей оперативной памяти.
+    /// </summary>
     public class SizeDefiningObjectPoolProvider<T> : IWaitableObjectPoolProvider<T> where T : class
     {
         private readonly Func<T> _creator;
@@ -78,11 +104,17 @@ namespace Sbb.Compression.Storages
 
         public SizeDefiningObjectPoolProvider(int sizeOfElement, Func<T> creator, Action<T> cleaner = null)
         {
-            _creator = creator;
+            if (sizeOfElement < 1)
+                throw new ArgumentOutOfRangeException(paramName: nameof(sizeOfElement));
+
+            _creator = creator ?? throw new ArgumentNullException(paramName: nameof(creator));
             _cleaner = cleaner;
             _sizeOfElement = sizeOfElement;
         }
 
+        /// <summary>
+        /// Определитель размера объектного пула.
+        /// </summary>
         public IPoolSizeDefiner PoolSizeDefiner { get; set; } = new ModestPoolSizeDefiner();
 
         public IWaitableObjectPool<T> ProvideNew()

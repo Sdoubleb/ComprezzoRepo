@@ -8,6 +8,9 @@ using Sbb.Compression.Stream4ers.Pumps;
 
 namespace Sbb.Compression.Compressors
 {
+    /// <summary>
+    /// Создатель конкретной реализации файлового компрессора.
+    /// </summary>
     public class FileCompressorCreator : ICreator<IFileCompressor>
     {
         private const int MB = 1 * 1024 * 1024; // 1 МБ
@@ -21,12 +24,21 @@ namespace Sbb.Compression.Compressors
         }
 
         // TODO: попробовать определять длину блока в зависимости от длины файла
+        /// <summary>
+        /// Длина блока байтов, считывающихся из файла за одну операцию.
+        /// </summary>
         public virtual int BlockLength { get; set; }
 
+        /// <summary>
+        /// Размер буфера файлового потока записи.
+        /// </summary>
         public virtual int BufferSize { get; set; }
 
         protected virtual Func<byte[]> ByteCreator => () => new byte[BlockLength];
 
+        /// <summary>
+        /// Создаёт конкретную реализацию файлового компрессора.
+        /// </summary>
         public virtual IFileCompressor Create()
         {
             ICompressionFileOpener fileOpener = CreateFileOpener();

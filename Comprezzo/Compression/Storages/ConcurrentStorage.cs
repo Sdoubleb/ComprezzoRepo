@@ -2,6 +2,9 @@
 
 namespace Sbb.Compression.Storages
 {
+    /// <summary>
+    /// Потокобезопасное временное хранилище пар ключ-значение.
+    /// </summary>
     public class ConcurrentStorage<TKey, TValue> : IStorage<TKey, TValue>
     {
         private readonly Dictionary<TKey, TValue> _dictionary = new Dictionary<TKey, TValue>();

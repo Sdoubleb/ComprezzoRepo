@@ -31,7 +31,7 @@ namespace Sbb.Compression.Stream4ers
             _threadProvider = threadProvider;
         }
 
-        public void Read()
+        public virtual void Read()
         {
             Thread[] threads = _threadProvider.Provide(new ThreadStart(BeginReadingBlock));
             Array.ForEach(threads, t => t.Start());
