@@ -26,7 +26,7 @@ namespace Sbb.Compression.Stream4ers
         public INumericStorageEnumerableProvider<NumberedByteBlock> StorageEnumerableProvider { get; set; }
 
         public IWaitableObjectPoolProvider<byte[]> PoolProvider { get; set; }
-
+        
         public BlockyStream4erPair CreateStream4erPair()
         {
             IWaitableObjectPool<byte[]> bytePool = PoolProvider.ProvideNew();

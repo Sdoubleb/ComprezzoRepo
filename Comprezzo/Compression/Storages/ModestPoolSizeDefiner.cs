@@ -34,6 +34,9 @@ namespace Sbb.Compression.Storages
         /// Например, для массива чисел - количество элементов,
         /// помноженное на количество байтов, выделяемое под число.
         /// </param>
+        /// <exception cref="MemoryLacksException">
+        /// Размер элемента превышает объём доступной памяти.
+        /// </exception>
         public virtual int Define(int sizeOfElement)
         {
             if (sizeOfElement < 1)

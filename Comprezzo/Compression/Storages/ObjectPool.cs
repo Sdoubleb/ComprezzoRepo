@@ -117,6 +117,9 @@ namespace Sbb.Compression.Storages
         /// </summary>
         public IPoolSizeDefiner PoolSizeDefiner { get; set; } = new ModestPoolSizeDefiner();
 
+        /// <exception cref="MemoryLacksException">
+        /// Размер элемента превышает объём доступной памяти.
+        /// </exception>
         public IWaitableObjectPool<T> ProvideNew()
             => new ObjectPool<T>(_creator, _cleaner, PoolSizeDefiner.Define(_sizeOfElement));
     }

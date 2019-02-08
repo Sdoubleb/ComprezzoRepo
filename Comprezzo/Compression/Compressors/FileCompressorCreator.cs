@@ -39,12 +39,23 @@ namespace Sbb.Compression.Compressors
         /// <summary>
         /// Создаёт конкретную реализацию файлового компрессора.
         /// </summary>
+        /// <exception cref="MemoryLacksException">
+        /// Длина блока, выбранная для чтения файла, превышает объём доступной памяти.
+        /// </exception>
         public virtual IFileCompressor Create()
         {
-            ICompressionFileOpener fileOpener = CreateFileOpener();
-            IStream2StreamPump pump = CreatePump();
-            IFileCompressor compressor = new FileCompressor(fileOpener, pump);
-            return compressor;
+            try
+            {
+                ICompressionFileOpener fileOpener = CreateFileOpener();
+                IStream2StreamPump pump = CreatePump();
+                IFileCompressor compressor = new FileCompressor(fileOpener, pump);
+                return compressor;
+            }
+            catch (MemoryLacksException exception)
+            {
+                throw new MemoryLacksException("Длина блока, выбранная для чтения файла,"
+                    + " превышает объём доступной памяти.", exception);
+            }
         }
 
         protected virtual ICompressionFileOpener CreateFileOpener()
