@@ -4,6 +4,7 @@ using Sbb.Compression.Common;
 using Sbb.Compression.FileOpeners;
 using Sbb.Compression.Storages;
 using Sbb.Compression.Stream4ers;
+using Sbb.Compression.Stream4ers.Direct;
 using Sbb.Compression.Stream4ers.Pumps;
 
 namespace Sbb.Compression.Compressors

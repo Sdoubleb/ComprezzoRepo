@@ -4,7 +4,7 @@ using System.Threading;
 using Sbb.Compression.Common;
 using Sbb.Compression.Storages;
 
-namespace Sbb.Compression.Stream4ers
+namespace Sbb.Compression.Stream4ers.Direct
 {
     // низкоуровневая реализация читателя потока;
     // чтение выполняется асинхронно;

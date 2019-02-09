@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using Sbb.Compression.Common;
 using Sbb.Compression.Storages;
+using Sbb.Compression.Stream4ers.Direct;
 
 namespace Sbb.Compression.Stream4ers
 {

@@ -3,7 +3,7 @@ using System.IO;
 using Sbb.Compression.Common;
 using Sbb.Compression.Storages;
 
-namespace Sbb.Compression.Stream4ers
+namespace Sbb.Compression.Stream4ers.Direct
 {
     /// <summary>
     /// Интерфейс поставщика низкоуровневого писателя байтовых потоков.
