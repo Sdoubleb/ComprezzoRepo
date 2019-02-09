@@ -22,7 +22,7 @@ namespace Sbb.Compression.Stream4ers.Direct
             foreach (var block in _byteBlocks)
             {
                 // на практике оказалось, что при синхронной записи
-                // достигается гораздо меньший расход памяти
+                // достигается гораздо меньший расход памяти (при сжатии файлов)
                 _stream.Write(block.Bytes, 0, block.Length);
 
                 _bytePool.Release(block.Bytes);
