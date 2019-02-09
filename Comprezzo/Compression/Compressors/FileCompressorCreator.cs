@@ -18,7 +18,7 @@ namespace Sbb.Compression.Compressors
 
         public FileCompressorCreator() : this(MB) { }
 
-        public FileCompressorCreator(int blockLength = MB, int bufferSize = MB)
+        public FileCompressorCreator(int blockLength = 4 * MB, int bufferSize = 4 * MB)
         {
             BlockLength = blockLength;
             BufferSize = bufferSize;
@@ -94,7 +94,7 @@ namespace Sbb.Compression.Compressors
 
         protected virtual IStreamWriterProvider CreateWriterProvider()
         {
-            return new SnglthrdStreamWriterProvider();
+            return new MlthrdStreamWriterProvider();
         }
 
         protected virtual ISizeableStorageProvider<long, NumberedByteBlock> CreateStorageProvider()
