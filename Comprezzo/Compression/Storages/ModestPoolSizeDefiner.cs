@@ -60,7 +60,9 @@ namespace Sbb.Compression.Storages
             }
             catch
             {
+#if DEBUG
                 Debugger.Break();
+#endif
                 return MemoryToUseIfSmthWhenWrong;
             }
         }

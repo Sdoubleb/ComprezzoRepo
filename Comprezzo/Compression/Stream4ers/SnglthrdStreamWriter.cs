@@ -6,27 +6,18 @@ using Sbb.Compression.Storages;
 namespace Sbb.Compression.Stream4ers
 {
     // низкоуровневая реализация писателя потока;
-    // чтение выполняется синхронно;
-    // для чтения используется один поток;
+    // запись выполняется синхронно;
+    // для записи используется один поток;
     // байтовые массивы, представляющие блоки,
     // берутся из перечислителя хранилища
-    // и после чтения складываются в пул
-    class SnglthrdStreamWriter : IWriter
+    // и после записи складываются в пул
+    class SnglthrdStreamWriter : StreamWriterBase
     {
-        private readonly Stream _stream;
-
-        private readonly IObjectPool<byte[]> _bytePool;
-        private readonly IEnumerable<NumberedByteBlock> _byteBlocks;
-
         public SnglthrdStreamWriter(Stream stream,
             IObjectPool<byte[]> bytePool, IEnumerable<NumberedByteBlock> byteBlocks)
-        {
-            _stream = stream;
-            _bytePool = bytePool;
-            _byteBlocks = byteBlocks;
-        }
+            : base(stream, bytePool, byteBlocks) { }
 
-        public virtual void Write()
+        public override void Write()
         {
             foreach (var block in _byteBlocks)
             {
@@ -39,9 +30,9 @@ namespace Sbb.Compression.Stream4ers
         }
     }
 
-    class SnglthrdStreamWriterProvider : IStreamWriterProvider
+    class SnglthrdStreamWriterProvider : StreamWriterProviderBase
     {
-        public IWriter ProvideNew(Stream stream,
+        public override IWriter ProvideNew(Stream stream,
             IObjectPool<byte[]> bytePool, IEnumerable<NumberedByteBlock> byteBlocks)
         {
             return new SnglthrdStreamWriter(stream, bytePool, byteBlocks);

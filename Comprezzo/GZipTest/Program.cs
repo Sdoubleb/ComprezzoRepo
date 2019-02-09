@@ -41,9 +41,11 @@ namespace GZipTest
                 Console.WriteLine($"Времени затрачено: {sw.Elapsed}.");
             }
             catch (Exception e)
-            {
-                Console.WriteLine("Ошибка: " + e.Message);
+            {          
+#if DEBUG
                 Debugger.Break();
+#endif
+                Console.WriteLine("Ошибка: " + e.Message);
             }
 
             Console.ReadLine();

@@ -8,7 +8,7 @@ namespace Sbb.Compression.Stream4ers
 {
     // низкоуровневая реализация читателя потока;
     // чтение выполняется асинхронно;
-    // для чтения используется несколько потоков;
+    // для чтения используются несколько потоков;
     // байтовые массивы, представляющие блоки,
     // берутся из пула и после чтения складываются в хранилище
     // с номерами блоков в качестве ключей
@@ -22,8 +22,7 @@ namespace Sbb.Compression.Stream4ers
         private readonly IWaitableObjectPool<byte[]> _bytePool;
         private readonly IStorage<long, NumberedByteBlock> _byteBlocks;
         
-        private IThreadProvider _threadProvider;
-        
+        private readonly IThreadProvider _threadProvider;        
         private readonly object _locker = new object();
 
         public AsyncMlthrdStreamReader(Stream stream, int blockLength,
