@@ -44,6 +44,7 @@
     <Compile Include="CompressionException.cs" />
     <Compile Include="MemoryLacksException.cs" />
     <Compile Include="Stream4ers\Direct\MlthrdStreamWriter.cs" />
+    <Compile Include="Stream4ers\Direct\StreamReaderBase.cs" />
     <Compile Include="Stream4ers\Direct\StreamWriterBase.cs" />
     <Compile Include="_Drafts\_OrderedByteBlock.cs" />
     <Compile Include="_Drafts\_AsyncCompressor.cs" />

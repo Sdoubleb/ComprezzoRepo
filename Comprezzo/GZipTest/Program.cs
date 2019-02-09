@@ -53,7 +53,7 @@ namespace GZipTest
 
         private static void Work()
         {
-            var creator = new FileCompressorCreator();
+            var creator = new FileCompressorCreator(10 * 1024 * 1024, 10 * 1024 * 1024);
             using (IFileCompressor compressor = creator.Create())
             {
                 CompressionParams @params = CompressionParams.Instance;

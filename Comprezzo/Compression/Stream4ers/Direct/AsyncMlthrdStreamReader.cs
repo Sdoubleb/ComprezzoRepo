@@ -12,31 +12,21 @@ namespace Sbb.Compression.Stream4ers.Direct
     // байтовые массивы, представляющие блоки,
     // берутся из пула и после чтения складываются в хранилище
     // с номерами блоков в качестве ключей
-    class AsyncMlthrdStreamReader : IReader
+    class AsyncMlthrdStreamReader : StreamReaderBase
     {
-        private readonly Stream _stream;
-
-        private readonly int _blockLength;
         private long _currentBlockNumber; // номер текущего считываемого блока
-
-        private readonly IWaitableObjectPool<byte[]> _bytePool;
-        private readonly IStorage<long, NumberedByteBlock> _byteBlocks;
         
         private readonly IThreadProvider _threadProvider;        
         private readonly object _locker = new object();
 
         public AsyncMlthrdStreamReader(Stream stream, int blockLength,
             IWaitableObjectPool<byte[]> bytePool, IStorage<long, NumberedByteBlock> byteBlocks,
-            IThreadProvider threadProvider)
+            IThreadProvider threadProvider) : base(stream, blockLength, bytePool, byteBlocks)
         {
-            _stream = stream;
-            _blockLength = blockLength;
-            _bytePool = bytePool;
-            _byteBlocks = byteBlocks;
             _threadProvider = threadProvider;
         }
 
-        public virtual void Read()
+        public override void Read()
         {
             Thread[] threads = _threadProvider.Provide(new ThreadStart(BeginReadingBlock));
             Array.ForEach(threads, t => t.Start());
@@ -75,9 +65,9 @@ namespace Sbb.Compression.Stream4ers.Direct
         }
     }
 
-    class AsyncMlthrdStreamReaderProvider : IStreamReaderProvider
+    class AsyncMlthrdStreamReaderProvider : StreamReaderProviderBase
     {
-        public IReader ProvideNew(Stream stream, int blockLength,
+        public override IReader ProvideNew(Stream stream, int blockLength,
             IWaitableObjectPool<byte[]> bytePool, IStorage<long, NumberedByteBlock> byteBlocks)
         {
             return new AsyncMlthrdStreamReader(stream, blockLength, bytePool, byteBlocks, ThreadProvider);

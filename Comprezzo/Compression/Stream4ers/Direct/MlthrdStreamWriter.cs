@@ -20,8 +20,7 @@ namespace Sbb.Compression.Stream4ers.Direct
 
         public MlthrdStreamWriter(Stream stream,
             IObjectPool<byte[]> bytePool, IEnumerable<NumberedByteBlock> byteBlocks,
-            IThreadProvider threadProvider)
-            : base(stream, bytePool, byteBlocks)
+            IThreadProvider threadProvider) : base(stream, bytePool, byteBlocks)
         {
             _threadProvider = threadProvider;
         }
