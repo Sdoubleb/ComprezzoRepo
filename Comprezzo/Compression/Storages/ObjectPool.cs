@@ -25,6 +25,8 @@ namespace Sbb.Compression.Storages
         private readonly object _locker = new object();
         private readonly Semaphore _semaphore; // позволяет ожидать объект
 
+        private bool _disposed = false;
+
         /// <param name="maxCount">Максимальне число объектов, которые может создать пул.</param>
         public ObjectPool(ICreator<T> creator, ICleaner<T> cleaner = null, int maxCount = Int32.MaxValue)
             : this(() => creator.Create(), obj => cleaner.Clean(obj), maxCount) { }
@@ -46,6 +48,8 @@ namespace Sbb.Compression.Storages
         {
             lock (_locker)
             {
+                ThrowIfDisposed();
+
                 if (_pool.Count > 0)
                     return _pool.Dequeue();
                 if (_currentCount < _maxCount)
@@ -78,12 +82,28 @@ namespace Sbb.Compression.Storages
             _cleaner?.Invoke(obj);
             lock (_locker)
             {
+                ThrowIfDisposed();
+
                 _pool.Enqueue(obj);
                 _semaphore.Release();
             }
         }
 
-        public void Dispose() => _semaphore.Close();
+        private void ThrowIfDisposed()
+        {
+            if (_disposed)
+                throw new ObjectDisposedException(objectName: GetType().FullName);
+        }
+
+        public void Dispose()
+        {
+            lock (_locker)
+            {
+                _pool.Clear();
+                _semaphore.Close();
+            }
+            _disposed = true;
+        }
     }
 
     /// <summary>
