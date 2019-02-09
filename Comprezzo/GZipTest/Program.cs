@@ -15,11 +15,13 @@ namespace GZipTest
             catch (IndexOutOfRangeException)
             {
                 Console.WriteLine("Неверно заданы параметры.");
+                Console.ReadLine();
                 return;
             }
             catch (ArgumentException ae)
             {
                 Console.WriteLine(ae.Message);
+                Console.ReadLine();
                 return;
             }
 

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.IO.Compression;
 using Sbb.Compression.FileOpeners;
 using Sbb.Compression.Stream4ers.Pumps;
@@ -33,6 +34,7 @@ namespace Sbb.Compression.Compressors
         /// </summary>
         public void Decompress(string inputFilePath, string outputFilePath)
         {
+            throw new NotImplementedException("Разжатие будет реализовано в следующей версии программы.");
             Work(inputFilePath, outputFilePath, CompressionMode.Decompress);
         }
 
