@@ -23,8 +23,10 @@ namespace GZipTest
                 return;
             }
 
-            string beginMessage = CompressionParams.Instance.Compress ? "Сжатие..." : "Разжатие...";
-            string endMessage = CompressionParams.Instance.Compress ? "Сжато." : "Разжато.";
+            CompressionParams @params = CompressionParams.Instance;
+            string suffix = $" {@params.InputFileName} в {@params.OutputFileName}";
+            string beginMessage = (@params.Compress ? "Сжатие" : "Разжатие") + suffix + "...";
+            string endMessage = (@params.Compress ? "Сжато" : "Разжато") + suffix + ".";
 
             Console.WriteLine(beginMessage);
 
